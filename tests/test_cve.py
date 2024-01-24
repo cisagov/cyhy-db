@@ -22,6 +22,7 @@ severity_params = [
 ]
 
 
+
 @pytest.mark.parametrize("version, score, expected_severity", severity_params)
 def test_calculate_severity(version, score, expected_severity):
     """Test that the severity is calculated correctly."""
@@ -31,14 +32,13 @@ def test_calculate_severity(version, score, expected_severity):
         cve.severity == expected_severity
     ), f"Failed for CVSS {version} with score {score}"
 
-
-def test_invalid_cvss_score():
+@pytest.mark.parametrize("bad_score", [-1.0, 11.0])
+def test_invalid_cvss_score(bad_score):
     """Test that an invalid CVSS score raises a ValueError."""
     with pytest.raises(
-        ValueError, match="CVSS score must be between 0.0 and 10.0 inclusive"
+        ValueError, match=f"than or equal to"
     ):
-        CVE(cvss_version="3.1", cvss_score=11.0, id="test-cve")
-
+        CVE(cvss_version="3.1", cvss_score=bad_score, id="test-cve")
 
 @pytest.mark.asyncio
 async def test_save(mongodb_engine):
