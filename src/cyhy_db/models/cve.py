@@ -5,25 +5,17 @@ from typing import Literal
 
 # Third-Party Libraries
 from odmantic import Field, Model
-from pydantic import field_validator
 
 
 class CVE(Model):
     """This class represents the CVE model."""
 
     id: str = Field(primary_field=True)
-    cvss_score: float
+    cvss_score: float = Field(ge=0.0, le=10.0)
     cvss_version: Literal["2.0", "3.0", "3.1"]
-    severity: Literal[1, 2, 3, 4] = Field(default_factory=lambda: 1)
+    severity: Literal[1, 2, 3, 4] = 1
 
     model_config = {"collection": "cves"}
-
-    @field_validator("cvss_score")
-    def validate_cvss_score(cls, v: float) -> float:
-        """Validate the CVSS score."""
-        if v < 0.0 or v > 10.0:
-            raise ValueError("CVSS score must be between 0.0 and 10.0 inclusive")
-        return v
 
     def calculate_severity(self):
         """Calculate the severity from the CVSS score."""
