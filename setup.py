@@ -42,10 +42,10 @@ def get_version(version_file):
 
 
 setup(
-    name="example",
+    name="cyhy-db",
     # Versions should comply with PEP440
-    version=get_version("src/example/_version.py"),
-    description="Example Python library",
+    version=get_version("src/cyhy_db/_version.py"),
+    description="CyHy Database Python library",
     long_description=readme(),
     long_description_content_type="text/markdown",
     # Landing page for CISA's cybersecurity mission
@@ -75,7 +75,6 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
@@ -83,17 +82,23 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     # What does your project relate to?
-    keywords="skeleton",
+    keywords=["cyhy", "database"],
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={"example": ["data/*.txt"]},
+    package_data={},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
-    install_requires=["docopt", "schema", "setuptools >= 24.2.0"],
+    install_requires=[
+        "docopt == 0.6.2",
+        "odmantic == 1.0.0",
+        "schema == 0.7.5",
+        "setuptools >= 69.0.3",
+    ],
     extras_require={
         "test": [
+            "pytest-asyncio",
             "coverage",
             # coveralls 1.11.0 added a service number for calls from
             # GitHub Actions. This caused a regression which resulted in a 422
@@ -102,11 +107,11 @@ setup(
             # 1.11.1 fixed this issue, but to ensure expected behavior we'll pin
             # to never grab the regression version.
             "coveralls != 1.11.0",
+            "docker == 7.0.0",
             "pre-commit",
             "pytest-cov",
             "pytest",
         ]
     },
-    # Conveniently allows one to run the CLI tool as `example`
-    entry_points={"console_scripts": ["example = example.example:main"]},
+    entry_points={},
 )
