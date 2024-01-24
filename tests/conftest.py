@@ -77,6 +77,7 @@ def mongodb_container(mongo_image_tag):
 
 @pytest.fixture(scope="session")
 def mongodb_engine(mongodb_container):
+    """Fixture for the MongoDB engine."""
     mongo_port = mongodb_container.attrs["NetworkSettings"]["Ports"]["27017/tcp"][0][
         "HostPort"
     ]

@@ -1,3 +1,5 @@
+"""Test CVE model functionality."""
+
 # Third-Party Libraries
 import pytest
 
@@ -22,6 +24,7 @@ severity_params = [
 
 @pytest.mark.parametrize("version, score, expected_severity", severity_params)
 def test_calculate_severity(version, score, expected_severity):
+    """Test that the severity is calculated correctly."""
     cve = CVE(cvss_version=version, cvss_score=score, id="test-cve")
     cve.calculate_severity()
     assert (
@@ -30,6 +33,7 @@ def test_calculate_severity(version, score, expected_severity):
 
 
 def test_invalid_cvss_score():
+    """Test that an invalid CVSS score raises a ValueError."""
     with pytest.raises(
         ValueError, match="CVSS score must be between 0.0 and 10.0 inclusive"
     ):
@@ -38,6 +42,7 @@ def test_invalid_cvss_score():
 
 @pytest.mark.asyncio
 async def test_save(mongodb_engine):
+    """Test that the severity is calculated correctly on save."""
     cve = CVE(cvss_version="3.1", cvss_score=9.0, id="test-cve")
     await cve.save(mongodb_engine)
     saved_cve = await mongodb_engine.find_one(CVE, CVE.id == "test-cve")

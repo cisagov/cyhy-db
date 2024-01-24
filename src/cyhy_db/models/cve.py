@@ -1,12 +1,16 @@
+"""This module defines the CVE model."""
+
 # Standard Python Libraries
 from typing import Literal
 
 # Third-Party Libraries
 from odmantic import Field, Model
-from pydantic import ValidationInfo, field_validator
+from pydantic import field_validator
 
 
 class CVE(Model):
+    """This class represents the CVE model."""
+
     id: str = Field(primary_field=True)
     cvss_score: float
     cvss_version: Literal["2.0", "3.0", "3.1"]
@@ -16,11 +20,13 @@ class CVE(Model):
 
     @field_validator("cvss_score")
     def validate_cvss_score(cls, v: float) -> float:
+        """Validate the CVSS score."""
         if v < 0.0 or v > 10.0:
             raise ValueError("CVSS score must be between 0.0 and 10.0 inclusive")
         return v
 
     def calculate_severity(self):
+        """Calculate the severity from the CVSS score."""
         # Calculate severity from cvss on save
         # Source: https://nvd.nist.gov/vuln-metrics/cvss
         #
@@ -56,5 +62,6 @@ class CVE(Model):
                 self.severity = 1
 
     async def save(self, engine):
+        """Save the CVE to the database."""
         self.calculate_severity()
         await engine.save(self)
