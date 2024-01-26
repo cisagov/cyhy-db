@@ -92,7 +92,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "docopt == 0.6.2",
-        "odmantic == 1.0.0",
+        "mongoengine == 0.27.0",
         "schema == 0.7.5",
         "setuptools >= 69.0.3",
     ],
