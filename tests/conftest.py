@@ -5,8 +5,7 @@ https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
 
 # Third-Party Libraries
 import docker
-from motor.motor_asyncio import AsyncIOMotorClient
-from odmantic import AIOEngine
+from mongoengine import connect, disconnect
 import pytest
 
 MONGO_INITDB_ROOT_USERNAME = os.environ.get("MONGO_INITDB_ROOT_USERNAME", "mongoadmin")
@@ -76,16 +75,55 @@ def mongodb_container(mongo_image_tag):
 
 
 @pytest.fixture(scope="session")
-def mongodb_engine(mongodb_container):
-    """Fixture for the MongoDB engine."""
+def mongo_express_container(mongodb_container, request):
+    if not request.config.getoption("--mongo-express"):
+        yield None
+        return
+
+    # Configuration for Mongo Express
+    mongo_express_container = docker_client.containers.run(
+        "mongo-express",
+        environment={
+            "ME_CONFIG_MONGODB_ADMINUSERNAME": MONGO_INITDB_ROOT_USERNAME,
+            "ME_CONFIG_MONGODB_ADMINPASSWORD": MONGO_INITDB_ROOT_PASSWORD,
+            "ME_CONFIG_MONGODB_SERVER": "mongodb",
+            "ME_CONFIG_MONGODB_ENABLE_ADMIN": "true",
+        },
+        links={"mongodb": "mongodb"},
+        ports={"8081/tcp": 8081},
+        detach=True,
+    )
+
+    def fin():
+        if request.config.getoption("--mongo-express"):
+            input("\n\nPress Enter to stop Mongo Express and MongoDB containers...")
+        mongo_express_container.stop()
+        mongo_express_container.remove(force=True)
+
+    request.addfinalizer(fin)
+    yield mongo_express_container
+
+
+@pytest.fixture(scope="session")
+def mongo_uri(mongodb_container):
+    """Fixture for the MongoDB URI."""
     mongo_port = mongodb_container.attrs["NetworkSettings"]["Ports"]["27017/tcp"][0][
         "HostPort"
     ]
     mongo_uri = f"mongodb://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PASSWORD}@localhost:{mongo_port}"
+    yield mongo_uri
 
-    client = AsyncIOMotorClient(mongo_uri)
-    engine = AIOEngine(client=client, database=DATABASE_NAME)
-    return engine
+
+@pytest.fixture(scope="session")
+def mongodb_engine(mongo_uri, mongo_express_container):
+    """Fixture for the MongoDB engine."""
+    connect(
+        host=mongo_uri, alias="default", db=DATABASE_NAME, uuidRepresentation="standard"
+    )
+
+    yield
+
+    disconnect()
 
 
 def pytest_addoption(parser):
@@ -98,6 +136,12 @@ def pytest_addoption(parser):
         action="store",
         default="docker.io/mongo:latest",
         help="mongodb image tag to use for testing",
+    )
+    parser.addoption(
+        "--mongo-express",
+        action="store_true",
+        default=False,
+        help="run Mongo Express for database inspection",
     )
 
 
