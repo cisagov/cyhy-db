@@ -1,6 +1,7 @@
 """Test CVE model functionality."""
 
 # Third-Party Libraries
+from mongoengine import ValidationError
 import pytest
 
 # cisagov Libraries
@@ -22,7 +23,6 @@ severity_params = [
 ]
 
 
-
 @pytest.mark.parametrize("version, score, expected_severity", severity_params)
 def test_calculate_severity(version, score, expected_severity):
     """Test that the severity is calculated correctly."""
@@ -32,19 +32,20 @@ def test_calculate_severity(version, score, expected_severity):
         cve.severity == expected_severity
     ), f"Failed for CVSS {version} with score {score}"
 
+
 @pytest.mark.parametrize("bad_score", [-1.0, 11.0])
 def test_invalid_cvss_score(bad_score):
     """Test that an invalid CVSS score raises a ValueError."""
-    with pytest.raises(
-        ValueError, match=f"than or equal to"
-    ):
-        CVE(cvss_version="3.1", cvss_score=bad_score, id="test-cve")
+    cve = CVE(cvss_version="3.1", cvss_score=bad_score, id="test-cve")
+    with pytest.raises(ValidationError):
+        cve.validate()  # Explicitly call validate to trigger validation
 
-@pytest.mark.asyncio
-async def test_save(mongodb_engine):
+
+def test_save(mongodb_engine):
     """Test that the severity is calculated correctly on save."""
     cve = CVE(cvss_version="3.1", cvss_score=9.0, id="test-cve")
-    await cve.save(mongodb_engine)
-    saved_cve = await mongodb_engine.find_one(CVE, CVE.id == "test-cve")
+    cve.save()  # Saving the object
+    saved_cve = CVE.objects(id="test-cve").first()  # Retrieving the object
+
     assert saved_cve is not None, "CVE not saved correctly"
     assert saved_cve.severity == 4, "Severity not calculated correctly on save"
