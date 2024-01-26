@@ -1,6 +1,5 @@
-from mongoengine import (
-    Document,
-)
+# Third-Party Libraries
+from mongoengine import Document
 
 
 class SnapshotDoc(Document):

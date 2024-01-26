@@ -1,15 +1,19 @@
+# Standard Python Libraries
+from collections.abc import Iterable
+import datetime
+
+# Third-Party Libraries
 from mongoengine import (
-    Document,
-    StringField,
-    IntField,
     BooleanField,
+    DateTimeField,
+    Document,
+    IntField,
     ListField,
     ReferenceField,
-    DateTimeField,
+    StringField,
 )
-import datetime
+
 from .ip_address import IPAddressField
-from collections.abc import Iterable
 
 
 class ScanDoc(Document):
