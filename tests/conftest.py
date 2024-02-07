@@ -3,16 +3,29 @@
 https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
 """
 
+# Standard Python Libraries
+import asyncio
+import os
+import time
+
 # Third-Party Libraries
+from beanie import Document, init_beanie
 import docker
-from mongoengine import connect, disconnect
+from motor.core import AgnosticClient
+from motor.motor_asyncio import AsyncIOMotorClient
 import pytest
+from pytest_asyncio import is_async_test
+
+# cisagov Libraries
+from cyhy_db import initialize_db
 
 MONGO_INITDB_ROOT_USERNAME = os.environ.get("MONGO_INITDB_ROOT_USERNAME", "mongoadmin")
 MONGO_INITDB_ROOT_PASSWORD = os.environ.get("MONGO_INITDB_ROOT_PASSWORD", "secret")
 DATABASE_NAME = os.environ.get("DATABASE_NAME", "test")
+MONGO_EXPRESS_PORT = os.environ.get("MONGO_EXPRESS_PORT", 8081)
 
-docker_client = docker.from_env()
+# Set the default event loop policy to be compatible with asyncio
+AgnosticClient.get_io_loop = asyncio.get_running_loop
 
 
 @pytest.fixture(autouse=True)
@@ -34,7 +47,13 @@ def group_github_log_lines(request):
 
 
 @pytest.fixture(scope="session")
-def mongodb_container(mongo_image_tag):
+def docker_client():
+    """Fixture for the Docker client."""
+    yield docker.from_env()
+
+
+@pytest.fixture(scope="session")
+def mongodb_container(docker_client, mongo_image_tag):
     """Fixture for the MongoDB test container."""
     container = docker_client.containers.run(
         mongo_image_tag,
@@ -74,8 +93,8 @@ def mongodb_container(mongo_image_tag):
     container.remove(force=True)
 
 
-@pytest.fixture(scope="session")
-def mongo_express_container(mongodb_container, request):
+@pytest.fixture(autouse=True, scope="session")
+def mongo_express_container(docker_client, request):
     if not request.config.getoption("--mongo-express"):
         yield None
         return
@@ -96,7 +115,10 @@ def mongo_express_container(mongodb_container, request):
 
     def fin():
         if request.config.getoption("--mongo-express"):
-            input("\n\nPress Enter to stop Mongo Express and MongoDB containers...")
+            print(
+                f"\n\nMongo Express is running at http://admin:pass@localhost:{MONGO_EXPRESS_PORT}"
+            )
+            input("Press Enter to stop Mongo Express and MongoDB containers...")
         mongo_express_container.stop()
         mongo_express_container.remove(force=True)
 
@@ -105,25 +127,26 @@ def mongo_express_container(mongodb_container, request):
 
 
 @pytest.fixture(scope="session")
-def mongo_uri(mongodb_container):
-    """Fixture for the MongoDB URI."""
+def db_uri(mongodb_container):
+    """Fixture for the database URI."""
     mongo_port = mongodb_container.attrs["NetworkSettings"]["Ports"]["27017/tcp"][0][
         "HostPort"
     ]
-    mongo_uri = f"mongodb://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PASSWORD}@localhost:{mongo_port}"
-    yield mongo_uri
+    uri = f"mongodb://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PASSWORD}@localhost:{mongo_port}"
+    yield uri
 
 
 @pytest.fixture(scope="session")
-def mongodb_engine(mongo_uri, mongo_express_container):
-    """Fixture for the MongoDB engine."""
-    connect(
-        host=mongo_uri, alias="default", db=DATABASE_NAME, uuidRepresentation="standard"
-    )
+def db_name(mongodb_container):
+    """Fixture for the database name."""
+    yield DATABASE_NAME
 
-    yield
 
-    disconnect()
+@pytest.fixture(autouse=True, scope="session")
+async def db_client(db_uri):
+    """Fixture for client init."""
+    print(f"Connecting to {db_uri}")
+    await initialize_db(db_uri, DATABASE_NAME)
 
 
 def pytest_addoption(parser):
