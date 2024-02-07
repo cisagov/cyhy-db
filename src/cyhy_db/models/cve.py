@@ -1,15 +1,18 @@
 # Third-Party Libraries
-from mongoengine import Document, FloatField, IntField, StringField
+from beanie import Document, Indexed, ValidateOnSave, before_event
+from pydantic import Field
 
 
 class CVE(Document):
-    id = StringField(primary_key=True)
-    cvss_score = FloatField(min_value=0.0, max_value=10.0)
-    cvss_version = StringField(choices=["2.0", "3.0", "3.1"])
-    severity = IntField(choices=[1, 2, 3, 4], default=1)
+    id: str = Indexed(primary_field=True)  # CVE ID
+    cvss_score: float = Field(ge=0.0, le=10.0)
+    cvss_version: str = Field(enum=["2.0", "3.0", "3.1"])
+    severity: int = Field(ge=1, le=4, default=1)
 
-    meta = {"collection": "cves"}
+    class Settings:
+        name = "cves"
 
+    @before_event(ValidateOnSave)
     def calculate_severity(self):
         if self.cvss_version == "2.0":
             if self.cvss_score == 10:
@@ -29,7 +32,3 @@ class CVE(Document):
                 self.severity = 2
             else:
                 self.severity = 1
-
-    def save(self, *args, **kwargs):
-        self.calculate_severity()
-        return super().save(*args, **kwargs)

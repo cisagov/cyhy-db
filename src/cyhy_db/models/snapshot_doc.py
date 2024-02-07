@@ -1,5 +1,5 @@
 # Third-Party Libraries
-from mongoengine import Document
+from beanie import Document
 
 
 class SnapshotDoc(Document):
