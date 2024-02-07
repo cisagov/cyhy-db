@@ -91,8 +91,8 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
     install_requires=[
+        "beanie == 1.25.0",
         "docopt == 0.6.2",
-        "mongoengine == 0.27.0",
         "schema == 0.7.5",
         "setuptools >= 69.0.3",
     ],
