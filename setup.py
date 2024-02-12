@@ -93,6 +93,7 @@ setup(
     install_requires=[
         "beanie == 1.25.0",
         "docopt == 0.6.2",
+        "pydantic[email, hypothesis]",
         "schema == 0.7.5",
         "setuptools >= 69.0.3",
     ],
@@ -108,8 +109,12 @@ setup(
             # to never grab the regression version.
             "coveralls != 1.11.0",
             "docker == 7.0.0",
+            "hypothesis",
+            "mimesis-factory",
+            "mimesis",
             "pre-commit",
             "pytest-cov",
+            "pytest-factoryboy",
             "pytest",
         ]
     },
