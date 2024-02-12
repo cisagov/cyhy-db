@@ -84,3 +84,19 @@ def test_invalid_ip_address():
             owner="owner_example",
             source="source_example",
         )
+
+
+async def test_reset_latest_flag_by_owner():
+    # Create a ScanDoc object
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR), owner="RESET_MY_LATEST", source="nmap"
+    )
+    await scan_doc.save()
+    # Check that the latest flag is set to True
+    assert scan_doc.latest == True
+    # Reset the latest flag
+    await ScanDoc.reset_latest_flag_by_owner("RESET_MY_LATEST")
+    # Retrieve the ScanDoc object from the database
+    await scan_doc.sync()
+    # Check that the latest flag is set to False
+    assert scan_doc.latest == False
