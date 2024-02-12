@@ -27,7 +27,6 @@ severity_params = [
 def test_calculate_severity(version, score, expected_severity):
     """Test that the severity is calculated correctly."""
     cve = CVE(id="CVE-2024-0128", cvss_version=version, cvss_score=score)
-    cve.calculate_severity()
     assert (
         cve.severity == expected_severity
     ), f"Failed for CVSS {version} with score {score}"
