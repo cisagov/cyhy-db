@@ -5,7 +5,7 @@ from typing import Any, Dict, Iterable, List, Union
 
 # Third-Party Libraries
 from beanie import Document, Link
-from beanie.operators import Push, In, Set
+from beanie.operators import In, Push, Set
 from bson import ObjectId
 from bson.dbref import DBRef
 from pydantic import Field, model_validator
@@ -62,7 +62,6 @@ class ScanDoc(Document):
             | str
         ),
     ):
-
         if isinstance(ips, Iterable):
             # TODO Figure out why coverage thinks this next line can exit early
             ip_ints = [int(ipaddress.ip_address(x)) for x in ips]

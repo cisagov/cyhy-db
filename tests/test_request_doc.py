@@ -1,11 +1,13 @@
 """Test RequestDoc model functionality."""
 
+# Standard Python Libraries
 import ipaddress
 
 # Third-Party Libraries
-import pytest
+from hypothesis import given
+from hypothesis import strategies as st
 from pydantic import ValidationError
-from hypothesis import given, strategies as st
+import pytest
 
 # cisagov Libraries
 from cyhy_db.models import RequestDoc

@@ -1,8 +1,10 @@
+# Standard Python Libraries
+from datetime import datetime
+
 # Third-Party Libraries
 from beanie import Document
 from pydantic import Field
 from pymongo import ASCENDING, IndexModel
-from datetime import datetime
 
 
 class SnapshotDoc(Document):

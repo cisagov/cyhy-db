@@ -1,15 +1,15 @@
 """Test ScanDoc model functionality."""
 
-import ipaddress
+# Standard Python Libraries
 import datetime
+import ipaddress
 
 # Third-Party Libraries
-import pytest
 from pydantic import ValidationError
+import pytest
 
 # cisagov Libraries
 from cyhy_db.models import ScanDoc, SnapshotDoc
-
 
 VALID_IP_1_STR = "0.0.0.1"
 VALID_IP_2_STR = "0.0.0.2"

@@ -3,8 +3,9 @@
 # Third-Party Libraries
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from cyhy_db.models import CVE
+# cisagov Libraries
 from cyhy_db import initialize_db
+from cyhy_db.models import CVE
 
 
 async def test_connection_motor(db_uri, db_name):

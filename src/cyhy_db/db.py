@@ -1,5 +1,7 @@
+# Third-Party Libraries
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
+
 from .models.cve import CVE
 from .models.request_doc import RequestDoc
 from .models.scan_doc import ScanDoc

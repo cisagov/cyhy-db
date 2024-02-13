@@ -1,9 +1,12 @@
-from pydantic import BaseModel, Field, field_validator, EmailStr
+# Standard Python Libraries
 from datetime import datetime
-from typing import List, Optional
-from beanie import before_event, Document, Insert, Link, Replace, ValidateOnSave
 from ipaddress import IPv4Network
 import re
+from typing import List, Optional
+
+# Third-Party Libraries
+from beanie import Document, Insert, Link, Replace, ValidateOnSave, before_event
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from .enum import (
     AgencyType,
