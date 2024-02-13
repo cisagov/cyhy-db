@@ -1,11 +1,13 @@
 # Standard Python Libraries
 import datetime
 import ipaddress
-from typing import Any, Dict, Iterable
+from typing import Any, Dict, Iterable, List, Union
 
 # Third-Party Libraries
 from beanie import Document, Link
-from beanie.operators import Push, Set
+from beanie.operators import Push, In, Set
+from bson import ObjectId
+from bson.dbref import DBRef
 from pydantic import Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
@@ -15,7 +17,7 @@ class ScanDoc(Document):
     ip_int: int = Field(...)
     latest: bool = Field(default=True)
     owner: str = Field(...)
-    snapshots: list[Link["SnapshotDoc"]] = Field(default=[])
+    snapshots: List[Link["SnapshotDoc"]] = Field(default=[])
     source: str = Field(...)
     time: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
 
@@ -43,24 +45,48 @@ class ScanDoc(Document):
         ]
 
     @classmethod
-    async def reset_latest_flag_by_owner(cls, owner):
-        await cls.find(cls.latest == True, cls.owner == owner).update(
+    async def reset_latest_flag_by_owner(cls, owner: str):
+        await cls.find(cls.latest == True, cls.owner == owner).update_many(
             Set({cls.latest: False})
         )
 
     @classmethod
-    async def reset_latest_flag_by_ip(cls, ips):
-        ip_ints = (
-            [int(ipaddress.ip_address(x)) for x in ips]
-            if isinstance(ips, Iterable)
-            else [int(ipaddress.ip_address(ips))]
-        )
-        await cls.find(cls.latest == True, cls.ip_int.in_(ip_ints)).update(
+    async def reset_latest_flag_by_ip(
+        cls,
+        ips: (
+            int
+            | ipaddress.IPv4Address
+            | Iterable[int]
+            | Iterable[ipaddress.IPv4Address]
+            | Iterable[str]
+            | str
+        ),
+    ):
+
+        if isinstance(ips, Iterable):
+            # TODO Figure out why coverage thinks this next line can exit early
+            ip_ints = [int(ipaddress.ip_address(x)) for x in ips]
+        else:
+            ip_ints = [int(ipaddress.ip_address(ips))]
+
+        await cls.find(cls.latest == True, In(cls.ip_int, ip_ints)).update_many(
             Set({cls.latest: False})
         )
 
     @classmethod
-    async def tag_latest(cls, owners, snapshot_oid):
-        await cls.find(cls.latest == True, cls.owner.in_(owners)).update(
-            Push({cls.snapshots: snapshot_oid})
+    async def tag_latest(
+        cls, owners: List[str], snapshot: Union["SnapshotDoc", ObjectId, str]
+    ):
+        from . import SnapshotDoc
+
+        if isinstance(snapshot, SnapshotDoc):
+            ref = DBRef(SnapshotDoc.Settings.name, snapshot.id)
+        elif isinstance(snapshot, ObjectId):
+            ref = DBRef(SnapshotDoc.Settings.name, snapshot)
+        elif isinstance(snapshot, str):
+            ref = DBRef(SnapshotDoc.Settings.name, ObjectId(snapshot))
+        else:
+            raise ValueError("Invalid snapshot type")
+        await cls.find(cls.latest == True, In(cls.owner, owners)).update_many(
+            Push({cls.snapshots: ref})
         )

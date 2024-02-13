@@ -1,13 +1,14 @@
 """Test ScanDoc model functionality."""
 
 import ipaddress
+import datetime
 
 # Third-Party Libraries
 import pytest
 from pydantic import ValidationError
 
 # cisagov Libraries
-from cyhy_db.models import ScanDoc
+from cyhy_db.models import ScanDoc, SnapshotDoc
 
 
 VALID_IP_1_STR = "0.0.0.1"
@@ -88,15 +89,68 @@ def test_invalid_ip_address():
 
 async def test_reset_latest_flag_by_owner():
     # Create a ScanDoc object
+    OWNER = "RESET_BY_OWNER"
     scan_doc = ScanDoc(
-        ip=ipaddress.ip_address(VALID_IP_1_STR), owner="RESET_MY_LATEST", source="nmap"
+        ip=ipaddress.ip_address(VALID_IP_1_STR), owner=OWNER, source="nmap"
     )
     await scan_doc.save()
     # Check that the latest flag is set to True
     assert scan_doc.latest == True
     # Reset the latest flag
-    await ScanDoc.reset_latest_flag_by_owner("RESET_MY_LATEST")
+    await ScanDoc.reset_latest_flag_by_owner(OWNER)
     # Retrieve the ScanDoc object from the database
     await scan_doc.sync()
     # Check that the latest flag is set to False
     assert scan_doc.latest == False
+
+
+async def test_reset_latest_flag_by_ip():
+    # Create a ScanDoc object
+    IP_TO_RESET_1 = ipaddress.ip_address("128.205.1.2")
+    IP_TO_RESET_2 = ipaddress.ip_address("128.205.1.3")
+    scan_doc_1 = ScanDoc(ip=IP_TO_RESET_1, owner="RESET_BY_IP", source="nmap")
+    scan_doc_2 = ScanDoc(ip=IP_TO_RESET_2, owner="RESET_BY_IP", source="nmap")
+    await scan_doc_1.save()
+    await scan_doc_2.save()
+    # Check that the latest flag is set to True
+    assert scan_doc_1.latest == True
+    # Reset the latest flag on single IP
+    await ScanDoc.reset_latest_flag_by_ip(IP_TO_RESET_1)
+    # Retrieve the ScanDoc object from the database
+    await scan_doc_1.sync()
+    # Check that the latest flag is set to False
+    assert scan_doc_1.latest == False
+    # Reset by both IPs
+    await ScanDoc.reset_latest_flag_by_ip([IP_TO_RESET_1, IP_TO_RESET_2])
+    # Retrieve the ScanDoc object from the database
+    await scan_doc_2.sync()
+    # Check that the latest flag is set to False
+    assert scan_doc_2.latest == False
+
+
+async def test_tag_latest():
+    # Create a SnapshotDoc object
+
+    owner = "TAG_LATEST"
+    snapshot_doc = SnapshotDoc(
+        owner=owner,
+        start_time=datetime.datetime.utcnow(),
+        end_time=datetime.datetime.utcnow(),
+    )
+    await snapshot_doc.save()
+    # Create a ScanDoc object
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc.save()
+
+    # Tag the latest scan
+    await ScanDoc.tag_latest([owner], snapshot_doc)
+
+    # Retrieve the ScanDoc object from the database
+    scan_doc = await ScanDoc.find_one(ScanDoc.id == scan_doc.id, fetch_links=True)
+
+    # Check that the scan now has a snapshot
+    assert scan_doc.snapshots == [snapshot_doc], "Snapshot not added to scan"
