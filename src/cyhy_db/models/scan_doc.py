@@ -1,6 +1,6 @@
 # Standard Python Libraries
-import datetime
-import ipaddress
+from datetime import datetime
+from ipaddress import IPv4Address, ip_address
 from typing import Any, Dict, Iterable, List, Union
 
 # Third-Party Libraries
@@ -13,18 +13,18 @@ from pymongo import ASCENDING, IndexModel
 
 
 class ScanDoc(Document):
-    ip: ipaddress.IPv4Address = Field(...)
+    ip: IPv4Address = Field(...)
     ip_int: int = Field(...)
     latest: bool = Field(default=True)
     owner: str = Field(...)
     snapshots: List[Link["SnapshotDoc"]] = Field(default=[])
     source: str = Field(...)
-    time: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+    time: datetime = Field(default_factory=datetime.utcnow)
 
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         # ip may still be string if it was just set
-        values["ip_int"] = int(ipaddress.ip_address(values["ip"]))
+        values["ip_int"] = int(ip_address(values["ip"]))
         return values
 
     class Config:
@@ -55,18 +55,18 @@ class ScanDoc(Document):
         cls,
         ips: (
             int
-            | ipaddress.IPv4Address
+            | IPv4Address
             | Iterable[int]
-            | Iterable[ipaddress.IPv4Address]
+            | Iterable[IPv4Address]
             | Iterable[str]
             | str
         ),
     ):
         if isinstance(ips, Iterable):
             # TODO Figure out why coverage thinks this next line can exit early
-            ip_ints = [int(ipaddress.ip_address(x)) for x in ips]
+            ip_ints = [int(ip_address(x)) for x in ips]
         else:
-            ip_ints = [int(ipaddress.ip_address(ips))]
+            ip_ints = [int(ip_address(ips))]
 
         await cls.find(cls.latest == True, In(cls.ip_int, ip_ints)).update_many(
             Set({cls.latest: False})
