@@ -26,8 +26,7 @@ async def test_save():
     assert host_doc.id == VALID_IP_1_INT
 
 
-async def test_find():
+async def test_get_by_ip():
     # Find a HostDoc object by its IP address
-    host_doc = await HostDoc.find_one(HostDoc.id == VALID_IP_1_INT)
-    print(host_doc)
+    host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
     assert host_doc.ip == ip_address(VALID_IP_1_STR)
