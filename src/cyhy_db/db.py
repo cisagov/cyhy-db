@@ -2,12 +2,24 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from .models.cve import CVE
-from .models.request_doc import RequestDoc
-from .models.scan_doc import ScanDoc
-from .models.snapshot_doc import SnapshotDoc
+from .models import *
 
-ALL_MODELS = [CVE, RequestDoc, ScanDoc, SnapshotDoc]
+
+ALL_MODELS = [
+    CVE,
+    HostDoc,
+    HostScanDoc,
+    KEVDoc,
+    PlaceDoc,
+    PortScanDoc,
+    RequestDoc,
+    ReportDoc,
+    ScanDoc,
+    SnapshotDoc,
+    SystemControlDoc,
+    TallyDoc,
+    VulnScanDoc,
+]
 
 
 async def initialize_db(db_uri: str, db_name: str) -> None:
