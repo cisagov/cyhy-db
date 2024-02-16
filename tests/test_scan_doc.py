@@ -10,6 +10,7 @@ import pytest
 
 # cisagov Libraries
 from cyhy_db.models import ScanDoc, SnapshotDoc
+from cyhy_db.utils import utcnow
 
 VALID_IP_1_STR = "0.0.0.1"
 VALID_IP_2_STR = "0.0.0.2"
@@ -134,8 +135,8 @@ async def test_tag_latest():
     owner = "TAG_LATEST"
     snapshot_doc = SnapshotDoc(
         owner=owner,
-        start_time=datetime.datetime.utcnow(),
-        end_time=datetime.datetime.utcnow(),
+        start_time=utcnow(),
+        end_time=utcnow(),
     )
     await snapshot_doc.save()
     # Create a ScanDoc object
