@@ -19,6 +19,8 @@ from .enum import (
     Stage,
 )
 
+from ..utils import utcnow
+
 BOGUS_ID = "bogus_id_replace_me"
 
 
@@ -71,11 +73,11 @@ class RequestDoc(Document):
     id: str = Field(default=BOGUS_ID)
     agency: Agency
     children: List[Link["RequestDoc"]] = Field(default=[])
-    enrolled: datetime = Field(default_factory=datetime.utcnow)
+    enrolled: datetime = Field(default_factory=utcnow)
     init_stage: Stage = Field(default=Stage.NETSCAN1)
     key: Optional[str] = Field(default=None)
     networks: List[IPv4Network] = Field(default=[])
-    period_start: datetime = Field(default_factory=datetime.utcnow)
+    period_start: datetime = Field(default_factory=utcnow)
     report_period: ReportPeriod = Field(default=ReportPeriod.WEEKLY)
     report_types: List[ReportType] = Field(default=[])
     retired: bool = False

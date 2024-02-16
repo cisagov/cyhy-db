@@ -11,6 +11,8 @@ from pydantic import BaseModel, Field
 from typing import List, Dict
 from bson import ObjectId
 
+from ..utils import utcnow
+
 
 class VulnerabilityCounts(BaseModel):
     critical: int = 0
@@ -38,7 +40,7 @@ class TicketMetrics(BaseModel):
 
 class TicketOpenMetrics(BaseModel):
     # Numbers in this section refer to how long open tix were open AT this date/time
-    tix_open_as_of_date: datetime = Field(default_factory=datetime.utcnow)
+    tix_open_as_of_date: datetime = Field(default_factory=utcnow)
     critical: TicketMetrics = Field(default_factory=TicketMetrics)
     high: TicketMetrics = Field(default_factory=TicketMetrics)
     medium: TicketMetrics = Field(default_factory=TicketMetrics)
@@ -47,7 +49,7 @@ class TicketOpenMetrics(BaseModel):
 
 class TicketCloseMetrics(BaseModel):
     # Numbers in this section only include tix that closed AT/AFTER this date/time
-    tix_closed_after_date: datetime = Field(default_factory=datetime.utcnow)
+    tix_closed_after_date: datetime = Field(default_factory=utcnow)
     critical: TicketMetrics = Field(default_factory=TicketMetrics)
     high: TicketMetrics = Field(default_factory=TicketMetrics)
     medium: TicketMetrics = Field(default_factory=TicketMetrics)
@@ -57,7 +59,7 @@ class TicketCloseMetrics(BaseModel):
 class SnapshotDoc(Document):
     owner: str = Field(...)
     descendants_included: List[str] = Field(default=[])
-    last_change: datetime = Field(default_factory=datetime.utcnow)
+    last_change: datetime = Field(default_factory=utcnow)
     start_time: datetime = Field(...)
     end_time: datetime = Field(...)
     latest: bool = Field(default=True)
