@@ -41,6 +41,11 @@ class PocType(Enum):
     TECHNICAL = "TECHNICAL"
 
 
+class Protocol(Enum):
+    TCP = "tcp"
+    UDP = "udp"
+
+
 class ReportPeriod(Enum):
     MONTHLY = "MONTHLY"
     QUARTERLY = "QUARTERLY"
