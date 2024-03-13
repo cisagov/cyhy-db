@@ -12,6 +12,7 @@ from .report_doc import ReportDoc
 from .cve import CVE
 from .host_doc import HostDoc
 from .kev_doc import KEVDoc
+from .notification_doc import NotificationDoc
 from .place_doc import PlaceDoc
 from .request_doc import RequestDoc
 from .system_control_doc import SystemControlDoc
@@ -23,6 +24,7 @@ __all__ = [
     "HostDoc",
     "HostScanDoc",
     "KEVDoc",
+    "NotificationDoc",
     "PlaceDoc",
     "PortScanDoc",
     "RequestDoc",

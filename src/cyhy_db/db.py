@@ -10,6 +10,7 @@ ALL_MODELS = [
     HostDoc,
     HostScanDoc,
     KEVDoc,
+    NotificationDoc,
     PlaceDoc,
     PortScanDoc,
     RequestDoc,
