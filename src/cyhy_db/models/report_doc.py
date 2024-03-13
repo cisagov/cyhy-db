@@ -1,12 +1,15 @@
-from beanie import Document, Indexed, Link
+# Standard Python Libraries
 from datetime import datetime
 from typing import List
+
+# Third-Party Libraries
+from beanie import Document, Indexed, Link
+from pydantic import ConfigDict, Field
 from pymongo import ASCENDING, IndexModel
-from pydantic import Field, ConfigDict
 
 from . import SnapshotDoc
-from .enum import ReportType
 from ..utils import utcnow
+from .enum import ReportType
 
 
 class ReportDoc(Document):

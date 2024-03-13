@@ -1,11 +1,14 @@
-from beanie import Document
-from datetime import datetime
-from pydantic import Field, ConfigDict
-from typing import Optional
+# Standard Python Libraries
 import asyncio
+from datetime import datetime
+from typing import Optional
 
-from .enum import ControlAction, ControlTarget
+# Third-Party Libraries
+from beanie import Document
+from pydantic import ConfigDict, Field
+
 from ..utils import utcnow
+from .enum import ControlAction, ControlTarget
 
 CONTROL_DOC_POLL_INTERVAL = 5  # seconds
 

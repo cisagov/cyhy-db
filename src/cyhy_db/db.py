@@ -4,7 +4,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from .models import *
 
-
 ALL_MODELS = [
     CVE,
     HostDoc,

@@ -1,6 +1,9 @@
-from beanie import Document, before_event, Insert, Replace, ValidateOnSave
+# Standard Python Libraries
 from datetime import datetime
-from pydantic import BaseModel, Field, ConfigDict
+
+# Third-Party Libraries
+from beanie import Document, Insert, Replace, ValidateOnSave, before_event
+from pydantic import BaseModel, ConfigDict, Field
 
 from ..utils import utcnow
 

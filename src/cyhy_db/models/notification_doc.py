@@ -1,7 +1,10 @@
-from beanie import Document, BeanieObjectId
-from pydantic import Field, BaseModel, ConfigDict
-from bson import ObjectId
+# Standard Python Libraries
 from typing import List
+
+# Third-Party Libraries
+from beanie import BeanieObjectId, Document
+from bson import ObjectId
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class NotificationDoc(Document):

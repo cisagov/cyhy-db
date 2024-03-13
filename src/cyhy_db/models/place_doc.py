@@ -1,6 +1,9 @@
-from beanie import Document
+# Standard Python Libraries
 from typing import Optional
-from pydantic import Field, ConfigDict
+
+# Third-Party Libraries
+from beanie import Document
+from pydantic import ConfigDict, Field
 
 
 class PlaceDoc(Document):

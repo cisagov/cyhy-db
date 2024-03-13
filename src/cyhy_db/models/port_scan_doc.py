@@ -1,6 +1,9 @@
+# Standard Python Libraries
 from typing import Dict
-from pymongo import ASCENDING, IndexModel
+
+# Third-Party Libraries
 from pydantic import ConfigDict
+from pymongo import ASCENDING, IndexModel
 
 from . import ScanDoc
 from .enum import Protocol

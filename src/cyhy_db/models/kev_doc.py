@@ -1,3 +1,4 @@
+# Third-Party Libraries
 from beanie import Document
 from pydantic import ConfigDict
 

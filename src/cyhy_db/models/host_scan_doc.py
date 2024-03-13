@@ -1,7 +1,11 @@
-from . import ScanDoc
+# Standard Python Libraries
 from typing import List
-from pymongo import ASCENDING, IndexModel
+
+# Third-Party Libraries
 from pydantic import ConfigDict
+from pymongo import ASCENDING, IndexModel
+
+from . import ScanDoc
 
 
 class HostScanDoc(ScanDoc):

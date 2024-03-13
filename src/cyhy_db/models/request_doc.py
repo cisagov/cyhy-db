@@ -6,8 +6,9 @@ from typing import List, Optional
 
 # Third-Party Libraries
 from beanie import Document, Insert, Link, Replace, ValidateOnSave, before_event
-from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
+from ..utils import utcnow
 from .enum import (
     AgencyType,
     DayOfWeek,
@@ -18,8 +19,6 @@ from .enum import (
     Scheduler,
     Stage,
 )
-
-from ..utils import utcnow
 
 BOGUS_ID = "bogus_id_replace_me"
 

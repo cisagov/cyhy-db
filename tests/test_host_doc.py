@@ -1,5 +1,8 @@
-from cyhy_db.models import HostDoc
+# Standard Python Libraries
 from ipaddress import ip_address
+
+# cisagov Libraries
+from cyhy_db.models import HostDoc
 
 VALID_IP_1_STR = "0.0.0.1"
 VALID_IP_2_STR = "0.0.0.2"

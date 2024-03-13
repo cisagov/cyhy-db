@@ -1,7 +1,10 @@
+# Standard Python Libraries
+from datetime import datetime
 from typing import Dict
+
+# Third-Party Libraries
 from pydantic import ConfigDict
 from pymongo import ASCENDING, IndexModel
-from datetime import datetime
 
 from . import ScanDoc
 from .enum import Protocol

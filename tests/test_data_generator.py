@@ -1,9 +1,22 @@
+# Standard Python Libraries
+from datetime import datetime
+import ipaddress
+import random
+
+# Third-Party Libraries
+import factory
+from mimesis import Generic
+from mimesis.locales import DEFAULT_LOCALE
+from mimesis.providers.base import BaseProvider
+from mimesis_factory import MimesisField
+from pytest_factoryboy import register
+
+# cisagov Libraries
 from cyhy_db.models import CVE, RequestDoc
-from cyhy_db.models.request_doc import Agency, Contact, Location, Window
 from cyhy_db.models.enum import (
     AgencyType,
-    DayOfWeek,
     CVSSVersion,
+    DayOfWeek,
     PocType,
     ReportPeriod,
     ReportType,
@@ -11,16 +24,8 @@ from cyhy_db.models.enum import (
     Scheduler,
     Stage,
 )
+from cyhy_db.models.request_doc import Agency, Contact, Location, Window
 from cyhy_db.utils import utcnow
-from mimesis_factory import MimesisField
-from mimesis.locales import DEFAULT_LOCALE
-from mimesis.providers.base import BaseProvider
-from pytest_factoryboy import register
-import factory
-from mimesis import Generic
-import ipaddress
-import random
-from datetime import datetime
 
 
 class CyHyProvider(BaseProvider):
@@ -53,7 +58,7 @@ generic.add_provider(CyHyProvider)
 
 @register
 class CVEFactory(factory.Factory):
-    class Meta(object):
+    class Meta:
         model = CVE
 
     id = factory.LazyFunction(lambda: generic.cyhy_provider.cve_id())
@@ -63,7 +68,7 @@ class CVEFactory(factory.Factory):
 
 
 class AgencyFactory(factory.Factory):
-    class Meta(object):
+    class Meta:
         model = Agency
 
     name = factory.Faker("company")
@@ -79,7 +84,7 @@ class AgencyFactory(factory.Factory):
 
 
 class ContactFactory(factory.Factory):
-    class Meta(object):
+    class Meta:
         model = Contact
 
     email = factory.Faker("email")
@@ -89,7 +94,7 @@ class ContactFactory(factory.Factory):
 
 
 class LocationFactory(factory.Factory):
-    class Meta(object):
+    class Meta:
         model = Location
 
     country_name = factory.Faker("country")
@@ -104,7 +109,7 @@ class LocationFactory(factory.Factory):
 
 
 class WindowFactory(factory.Factory):
-    class Meta(object):
+    class Meta:
         model = Window
 
     day = factory.LazyFunction(lambda: random.choice(list(DayOfWeek)))
@@ -113,7 +118,7 @@ class WindowFactory(factory.Factory):
 
 
 class RequestDocFactory(factory.Factory):
-    class Meta(object):
+    class Meta:
         model = RequestDoc
 
     id = factory.LazyAttribute(
@@ -138,9 +143,9 @@ class RequestDocFactory(factory.Factory):
     )
     # create a set of 1 to 3 random scan types from the ScanType enum
     scan_types = factory.LazyFunction(
-        lambda: set(
-            [random.choice(list(ScanType)) for _ in range(random.randint(1, 3))]
-        )
+        lambda: {
+            random.choice(list(ScanType)) for _ in range(random.randint(1, 3))
+        }
     )
 
 

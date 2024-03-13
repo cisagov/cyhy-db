@@ -8,7 +8,7 @@ from beanie import Document, Link
 from beanie.operators import In, Push, Set
 from bson import ObjectId
 from bson.dbref import DBRef
-from pydantic import Field, model_validator, ConfigDict
+from pydantic import ConfigDict, Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
 

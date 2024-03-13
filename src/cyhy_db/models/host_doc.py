@@ -1,12 +1,16 @@
-from beanie import Document, before_event, Indexed, Insert, Replace, ValidateOnSave
+# Standard Python Libraries
 from datetime import datetime
-from pydantic import BaseModel, Field, model_validator, ConfigDict
-from pymongo import ASCENDING, IndexModel
-from typing import Any, Dict, Optional, Tuple
-import random
-from .enum import Stage, Status
 from ipaddress import IPv4Address, ip_address
+import random
+from typing import Any, Dict, Optional, Tuple
+
+# Third-Party Libraries
+from beanie import Document, Indexed, Insert, Replace, ValidateOnSave, before_event
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pymongo import ASCENDING, IndexModel
+
 from ..utils import deprecated, utcnow
+from .enum import Stage, Status
 
 
 class State(BaseModel):
