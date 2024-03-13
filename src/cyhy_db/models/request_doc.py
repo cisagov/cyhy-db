@@ -107,4 +107,3 @@ class RequestDoc(Document):
     class Settings:
         # Beanie settings
         name = "requests"
-        indexes = []
