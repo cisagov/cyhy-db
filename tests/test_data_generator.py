@@ -143,9 +143,7 @@ class RequestDocFactory(factory.Factory):
     )
     # create a set of 1 to 3 random scan types from the ScanType enum
     scan_types = factory.LazyFunction(
-        lambda: {
-            random.choice(list(ScanType)) for _ in range(random.randint(1, 3))
-        }
+        lambda: {random.choice(list(ScanType)) for _ in range(random.randint(1, 3))}
     )
 
 
