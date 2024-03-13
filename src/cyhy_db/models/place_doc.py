@@ -1,9 +1,11 @@
 from beanie import Document
 from typing import Optional
-from pydantic import Field
+from pydantic import Field, ConfigDict
 
 
 class PlaceDoc(Document):
+    model_config = ConfigDict(extra="forbid")
+
     id: int  # GNIS FEATURE_ID (INCITS 446-2008) - https://geonames.usgs.gov/domestic/index.html
     name: str
     clazz: str = Field(alias="class")  # 'class' is a reserved keyword in Python

@@ -1,6 +1,6 @@
 from beanie import Document, before_event, Indexed, Insert, Replace, ValidateOnSave
 from datetime import datetime
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, ConfigDict
 from pymongo import ASCENDING, IndexModel
 from typing import Any, Dict, Optional, Tuple
 import random
@@ -15,7 +15,9 @@ class State(BaseModel):
 
 
 class HostDoc(Document):
-    id: int = Field(...)  # IP address as an integer
+    model_config = ConfigDict(extra="forbid")
+
+    id: int = Field()  # IP address as an integer
     ip: IPv4Address = Field(...)
     owner: str = Field(...)
     last_change: datetime = Field(default_factory=utcnow)
@@ -31,8 +33,7 @@ class HostDoc(Document):
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         # ip may still be string if it was just set
-        values["id"] = int(ip_address(values["ip"]))
-        print(values)
+        values["_id"] = int(ip_address(values["ip"]))
         return values
 
     @before_event(Insert, Replace, ValidateOnSave)

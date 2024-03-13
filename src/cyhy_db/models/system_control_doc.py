@@ -1,6 +1,6 @@
 from beanie import Document
 from datetime import datetime
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from typing import Optional
 import asyncio
 
@@ -11,6 +11,8 @@ CONTROL_DOC_POLL_INTERVAL = 5  # seconds
 
 
 class SystemControlDoc(Document):
+    model_config = ConfigDict(extra="forbid")
+
     action: ControlAction
     sender: str  # Free-form, for UI / Logging
     target: ControlTarget

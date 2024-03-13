@@ -6,7 +6,7 @@ from typing import List, Optional
 
 # Third-Party Libraries
 from beanie import Document, Insert, Link, Replace, ValidateOnSave, before_event
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
 
 from .enum import (
     AgencyType,
@@ -25,6 +25,8 @@ BOGUS_ID = "bogus_id_replace_me"
 
 
 class Contact(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     email: EmailStr
     name: str
     phone: str
@@ -32,6 +34,8 @@ class Contact(BaseModel):
 
 
 class Location(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     country_name: str
     country: str
     county_fips: str
@@ -44,6 +48,8 @@ class Location(BaseModel):
 
 
 class Agency(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     name: str
     acronym: str
     type: Optional[AgencyType] = Field(default=None)
@@ -52,11 +58,15 @@ class Agency(BaseModel):
 
 
 class ScanLimit(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     scan_type: ScanType = Field(..., alias="scanType")
     concurrent: int = Field(ge=0)
 
 
 class Window(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     day: DayOfWeek = Field(default=DayOfWeek.SUNDAY)
     duration: int = Field(default=168, ge=0, le=168)
     start: str = Field(default="00:00:00")
@@ -70,6 +80,8 @@ class Window(BaseModel):
 
 
 class RequestDoc(Document):
+    model_config = ConfigDict(extra="forbid")
+
     id: str = Field(default=BOGUS_ID)
     agency: Agency
     children: List[Link["RequestDoc"]] = Field(default=[])

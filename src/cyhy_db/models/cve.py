@@ -3,12 +3,15 @@ from typing import Any, Dict
 
 # Third-Party Libraries
 from beanie import Document, Indexed, ValidateOnSave, before_event
-from pydantic import Field, model_validator
+from pydantic import Field, model_validator, ConfigDict
 
 from .enum import CVSSVersion
 
 
 class CVE(Document):
+    # Validate on assignment so ip_int is recalculated as ip is set
+    model_config = ConfigDict(extra="forbid", validate_assignment=True)
+
     id: str = Indexed(primary_field=True)  # CVE ID
     cvss_score: float = Field(ge=0.0, le=10.0)
     cvss_version: CVSSVersion = Field(default=CVSSVersion.V3_1)
@@ -35,11 +38,6 @@ class CVE(Document):
             else:
                 values["severity"] = 1
         return values
-
-    class Config:
-        # Pydantic configuration
-        # Validate on assignment so ip_int is recalculated as ip is set
-        validate_assignment = True
 
     class Settings:
         # Beanie settings

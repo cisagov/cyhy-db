@@ -1,9 +1,12 @@
 from . import ScanDoc
 from typing import List
 from pymongo import ASCENDING, IndexModel
+from pydantic import ConfigDict
 
 
 class HostScanDoc(ScanDoc):
+    model_config = ConfigDict(extra="forbid")
+
     name: str
     accuracy: int
     line: int

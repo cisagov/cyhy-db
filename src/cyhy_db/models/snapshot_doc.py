@@ -4,7 +4,7 @@ from ipaddress import IPv4Network
 
 # Third-Party Libraries
 from beanie import Document
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from pymongo import ASCENDING, IndexModel
 from datetime import datetime
 from pydantic import BaseModel, Field
@@ -15,6 +15,8 @@ from ..utils import utcnow
 
 
 class VulnerabilityCounts(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     critical: int = 0
     high: int = 0
     medium: int = 0
@@ -23,6 +25,8 @@ class VulnerabilityCounts(BaseModel):
 
 
 class WorldData(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     host_count: int = 0
     vulnerable_host_count: int = 0
     vulnerabilities: VulnerabilityCounts = Field(default_factory=VulnerabilityCounts)
@@ -34,11 +38,15 @@ class WorldData(BaseModel):
 
 
 class TicketMetrics(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     median: int = 0
     max: int = 0
 
 
 class TicketOpenMetrics(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     # Numbers in this section refer to how long open tix were open AT this date/time
     tix_open_as_of_date: datetime = Field(default_factory=utcnow)
     critical: TicketMetrics = Field(default_factory=TicketMetrics)
@@ -48,6 +56,8 @@ class TicketOpenMetrics(BaseModel):
 
 
 class TicketCloseMetrics(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     # Numbers in this section only include tix that closed AT/AFTER this date/time
     tix_closed_after_date: datetime = Field(default_factory=utcnow)
     critical: TicketMetrics = Field(default_factory=TicketMetrics)
@@ -57,6 +67,8 @@ class TicketCloseMetrics(BaseModel):
 
 
 class SnapshotDoc(Document):
+    model_config = ConfigDict(extra="forbid")
+
     owner: str = Field(...)
     descendants_included: List[str] = Field(default=[])
     last_change: datetime = Field(default_factory=utcnow)

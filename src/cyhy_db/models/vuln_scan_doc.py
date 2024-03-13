@@ -1,4 +1,5 @@
 from typing import Dict
+from pydantic import ConfigDict
 from pymongo import ASCENDING, IndexModel
 from datetime import datetime
 
@@ -7,6 +8,8 @@ from .enum import Protocol
 
 
 class VulnScanDoc(ScanDoc):
+    model_config = ConfigDict(extra="forbid")
+
     protocol: Protocol
     port: int
     service: str

@@ -8,11 +8,14 @@ from beanie import Document, Link
 from beanie.operators import In, Push, Set
 from bson import ObjectId
 from bson.dbref import DBRef
-from pydantic import Field, model_validator
+from pydantic import Field, model_validator, ConfigDict
 from pymongo import ASCENDING, IndexModel
 
 
 class ScanDoc(Document):
+    # Validate on assignment so ip_int is recalculated as ip is set
+    model_config = ConfigDict(extra="forbid", validate_assignment=True)
+
     ip: IPv4Address = Field(...)
     ip_int: int = Field(...)
     latest: bool = Field(default=True)
@@ -26,11 +29,6 @@ class ScanDoc(Document):
         # ip may still be string if it was just set
         values["ip_int"] = int(ip_address(values["ip"]))
         return values
-
-    class Config:
-        # Pydantic configuration
-        # Validate on assignment so ip_int is recalculated as ip is set
-        validate_assignment = True
 
     class Settings:
         # Beanie settings

@@ -1,11 +1,13 @@
 from typing import Dict
 from pymongo import ASCENDING, IndexModel
+from pydantic import ConfigDict
 
 from . import ScanDoc
 from .enum import Protocol
 
 
 class PortScanDoc(ScanDoc):
+    model_config = ConfigDict(extra="forbid")
     protocol: Protocol
     port: int
     service: Dict = {}  # Assuming no specific structure for "service"
