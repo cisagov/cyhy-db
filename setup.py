@@ -93,7 +93,7 @@ setup(
     install_requires=[
         "beanie == 1.25.0",
         "docopt == 0.6.2",
-        "pydantic[email, hypothesis]",
+        "pydantic[email, hypothesis]",  # hypothesis plugin is currently disabled: https://github.com/pydantic/pydantic/issues/4682
         "schema == 0.7.5",
         "setuptools >= 69.0.3",
     ],
