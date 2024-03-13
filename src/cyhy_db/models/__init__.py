@@ -1,3 +1,11 @@
+"""This module contains the models for the CyHy database.
+
+# Imports are ordered to avoid a circular import.
+# isort is disabled for this file as it will break the ordering.
+
+isort:skip_file
+"""
+
 # Scan documents (order matters)
 from .scan_doc import ScanDoc
 from .host_scan_doc import HostScanDoc
