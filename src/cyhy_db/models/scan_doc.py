@@ -10,14 +10,14 @@ from beanie import Document, Link
 from beanie.operators import In, Push, Set
 from bson import ObjectId
 from bson.dbref import DBRef
-from pydantic import ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
 from .snapshot_doc import SnapshotDoc
 from ..utils import utcnow
 
 
-class ScanDoc(Document):
+class ScanDoc(Document):  # TODO: Make this a BaseModel
     # Validate on assignment so ip_int is recalculated as ip is set
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
