@@ -72,7 +72,7 @@ class Scheduler(Enum):
 
 
 class Stage(Enum):
-    BASESCAN = "BASESCAN"
+    BASESCAN = "BASESCAN"  # TODO: Delete if unused
     NETSCAN1 = "NETSCAN1"
     NETSCAN2 = "NETSCAN2"
     PORTSCAN = "PORTSCAN"
