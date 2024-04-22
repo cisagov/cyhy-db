@@ -12,6 +12,7 @@ from pydantic import ConfigDict, Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
 from .snapshot_doc import SnapshotDoc
+from ..utils import utcnow
 
 
 class ScanDoc(Document):
@@ -24,7 +25,7 @@ class ScanDoc(Document):
     owner: str = Field(...)
     snapshots: List[Link["SnapshotDoc"]] = Field(default=[])
     source: str = Field(...)
-    time: datetime = Field(default_factory=datetime.utcnow)
+    time: datetime = Field(default_factory=utcnow)
 
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
