@@ -3,8 +3,7 @@ from typing import List
 
 # Third-Party Libraries
 from beanie import BeanieObjectId, Document
-from bson import ObjectId
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 
 
 class NotificationDoc(Document):

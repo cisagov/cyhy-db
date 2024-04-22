@@ -2,7 +2,7 @@
 from typing import Any, Dict
 
 # Third-Party Libraries
-from beanie import Document, Indexed, ValidateOnSave, before_event
+from beanie import Document, Indexed
 from pydantic import ConfigDict, Field, model_validator
 
 from .enum import CVSSVersion
