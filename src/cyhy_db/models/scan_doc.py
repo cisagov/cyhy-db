@@ -1,3 +1,5 @@
+""" ScanDoc model for use as the base of other scan document classes. """
+
 # Standard Python Libraries
 from datetime import datetime
 from ipaddress import IPv4Address, ip_address
