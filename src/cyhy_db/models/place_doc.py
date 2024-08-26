@@ -2,14 +2,15 @@
 from typing import Optional
 
 # Third-Party Libraries
-from beanie import Document
+from beanie import Document, PydanticObjectId
 from pydantic import ConfigDict, Field
 
 
 class PlaceDoc(Document):
     model_config = ConfigDict(extra="forbid")
 
-    id: int  # GNIS FEATURE_ID (INCITS 446-2008) - https://geonames.usgs.gov/domestic/index.html
+    # GNIS FEATURE_ID (INCITS 446-2008) - https://geonames.usgs.gov/domestic/index.html
+    id: int = Field(default_factory=int)  # type: ignore[assignment]
     name: str
     clazz: str = Field(alias="class")  # 'class' is a reserved keyword in Python
     state: str

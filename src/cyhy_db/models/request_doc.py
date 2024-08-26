@@ -5,7 +5,15 @@ import re
 from typing import List, Optional
 
 # Third-Party Libraries
-from beanie import Document, Insert, Link, Replace, ValidateOnSave, before_event
+from beanie import (
+    Document,
+    Insert,
+    Link,
+    PydanticObjectId,
+    Replace,
+    ValidateOnSave,
+    before_event,
+)
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from ..utils import utcnow
@@ -81,7 +89,7 @@ class Window(BaseModel):
 class RequestDoc(Document):
     model_config = ConfigDict(extra="forbid")
 
-    id: str = Field(default=BOGUS_ID)
+    id: str = Field(default=BOGUS_ID)  # type: ignore[assignment]
     agency: Agency
     children: List[Link["RequestDoc"]] = Field(default=[])
     enrolled: datetime = Field(default_factory=utcnow)

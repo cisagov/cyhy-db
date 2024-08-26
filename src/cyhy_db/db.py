@@ -1,10 +1,10 @@
 # Third-Party Libraries
-from beanie import init_beanie
-from motor.motor_asyncio import AsyncIOMotorClient
+from beanie import Document, View, init_beanie
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from .models import *
 
-ALL_MODELS = [
+ALL_MODELS: list[type[Document] | type[View] | str] = [
     CVE,
     HostDoc,
     HostScanDoc,
@@ -22,10 +22,10 @@ ALL_MODELS = [
 ]
 
 
-async def initialize_db(db_uri: str, db_name: str) -> None:
+async def initialize_db(db_uri: str, db_name: str) -> AsyncIOMotorDatabase:
     try:
-        client = AsyncIOMotorClient(db_uri)
-        db = client[db_name]
+        client: AsyncIOMotorClient = AsyncIOMotorClient(db_uri)
+        db: AsyncIOMotorDatabase = client[db_name]
         await init_beanie(database=db, document_models=ALL_MODELS)
         return db
     except Exception as e:

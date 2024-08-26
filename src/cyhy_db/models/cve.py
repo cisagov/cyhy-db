@@ -12,7 +12,8 @@ class CVE(Document):
     # Validate on assignment so ip_int is recalculated as ip is set
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
-    id: str = Indexed(primary_field=True)  # CVE ID
+    # CVE ID as a string
+    id: str = Indexed(primary_field=True)  # type: ignore[assignment]
     cvss_score: float = Field(ge=0.0, le=10.0)
     cvss_version: CVSSVersion = Field(default=CVSSVersion.V3_1)
     severity: int = Field(ge=1, le=4, default=1)

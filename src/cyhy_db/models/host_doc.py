@@ -21,7 +21,8 @@ class State(BaseModel):
 class HostDoc(Document):
     model_config = ConfigDict(extra="forbid")
 
-    id: int = Field()  # IP address as an integer
+    # IP address as an integer
+    id: int = Field(default_factory=int)  # type: ignore[assignment]
     ip: IPv4Address = Field(...)
     owner: str = Field(...)
     last_change: datetime = Field(default_factory=utcnow)

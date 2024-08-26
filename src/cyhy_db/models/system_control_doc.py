@@ -33,7 +33,7 @@ class SystemControlDoc(Document):
         start_time = utcnow()
         while True:
             doc = await cls.get(document_id)
-            if doc.completed:
+            if doc and doc.completed:
                 return True
             if timeout and (utcnow() - start_time).total_seconds() > timeout:
                 return False
