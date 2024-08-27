@@ -5,14 +5,7 @@ import re
 from typing import List, Optional
 
 # Third-Party Libraries
-from beanie import (
-    Document,
-    Insert,
-    Link,
-    Replace,
-    ValidateOnSave,
-    before_event,
-)
+from beanie import Document, Insert, Link, Replace, ValidateOnSave, before_event
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from ..utils import utcnow

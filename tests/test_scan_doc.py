@@ -52,7 +52,9 @@ def test_ip_string_set():
         source="nmap",
     )
 
-    assert isinstance(scan_doc.ip, ipaddress.IPv4Address), "IP address was not converted"
+    assert isinstance(
+        scan_doc.ip, ipaddress.IPv4Address
+    ), "IP address was not converted"
     assert scan_doc.ip_int == VALID_IP_1_INT, "IP address integer was not calculated"
 
 
