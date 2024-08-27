@@ -91,11 +91,11 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
     install_requires=[
-        "beanie == 1.25.0",
+        "beanie == 1.26.0",
         "docopt == 0.6.2",
         "pydantic[email, hypothesis]",  # hypothesis plugin is currently disabled: https://github.com/pydantic/pydantic/issues/4682
-        "schema == 0.7.5",
-        "setuptools >= 69.0.3",
+        "schema == 0.7.7",
+        "setuptools >= 73.0.1",
     ],
     extras_require={
         "test": [
