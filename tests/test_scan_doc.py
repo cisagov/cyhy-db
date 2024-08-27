@@ -1,7 +1,6 @@
 """Test ScanDoc model functionality."""
 
 # Standard Python Libraries
-import datetime
 import ipaddress
 
 # Third-Party Libraries
@@ -53,7 +52,7 @@ def test_ip_string_set():
         source="nmap",
     )
 
-    assert type(scan_doc.ip) == ipaddress.IPv4Address, "IP address was not converted"
+    assert isinstance(scan_doc.ip, ipaddress.IPv4Address), "IP address was not converted"
     assert scan_doc.ip_int == VALID_IP_1_INT, "IP address integer was not calculated"
 
 
@@ -96,13 +95,13 @@ async def test_reset_latest_flag_by_owner():
     )
     await scan_doc.save()
     # Check that the latest flag is set to True
-    assert scan_doc.latest == True
+    assert scan_doc.latest is True
     # Reset the latest flag
     await ScanDoc.reset_latest_flag_by_owner(OWNER)
     # Retrieve the ScanDoc object from the database
     await scan_doc.sync()
     # Check that the latest flag is set to False
-    assert scan_doc.latest == False
+    assert scan_doc.latest is False
 
 
 async def test_reset_latest_flag_by_ip():
@@ -114,19 +113,19 @@ async def test_reset_latest_flag_by_ip():
     await scan_doc_1.save()
     await scan_doc_2.save()
     # Check that the latest flag is set to True
-    assert scan_doc_1.latest == True
+    assert scan_doc_1.latest is True
     # Reset the latest flag on single IP
     await ScanDoc.reset_latest_flag_by_ip(IP_TO_RESET_1)
     # Retrieve the ScanDoc object from the database
     await scan_doc_1.sync()
     # Check that the latest flag is set to False
-    assert scan_doc_1.latest == False
+    assert scan_doc_1.latest is False
     # Reset by both IPs
     await ScanDoc.reset_latest_flag_by_ip([IP_TO_RESET_1, IP_TO_RESET_2])
     # Retrieve the ScanDoc object from the database
     await scan_doc_2.sync()
     # Check that the latest flag is set to False
-    assert scan_doc_2.latest == False
+    assert scan_doc_2.latest is False
 
 
 async def test_tag_latest():

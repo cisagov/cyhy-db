@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 
 # Third-Party Libraries
-from beanie import Document, Indexed, Link
+from beanie import Document, Link
 from pydantic import ConfigDict, Field
 from pymongo import ASCENDING, IndexModel
 

@@ -5,7 +5,7 @@ import random
 from typing import Any, Dict, Optional, Tuple
 
 # Third-Party Libraries
-from beanie import Document, Indexed, Insert, Replace, ValidateOnSave, before_event
+from beanie import Document, Insert, Replace, ValidateOnSave, before_event
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
@@ -98,17 +98,17 @@ class HostDoc(Document):
         ]
 
     def set_state(self, nmap_says_up, has_open_ports, reason=None):
-        """Sets state.up based on different stage
-        evidence. nmap has a concept of up which is
-        different from our definition. An nmap "up" just
-        means it got a reply, not that there are any open
-        ports. Note either argument can be None."""
+        """Set state.up based on different stage evidence.
 
-        if has_open_ports == True:  # Only PORTSCAN sends in has_open_ports
+        nmap has a concept of up which is different from our definition. An nmap
+        "up" just means it got a reply, not that there are any open ports. Note
+        either argument can be None.
+        """
+        if has_open_ports:  # Only PORTSCAN sends in has_open_ports
             self.state = State(True, "open-port")
-        elif has_open_ports == False:
+        elif has_open_ports is False:
             self.state = State(False, "no-open")
-        elif nmap_says_up == False:  # NETSCAN says host is down
+        elif nmap_says_up is False:  # NETSCAN says host is down
             self.state = State(False, reason)
 
     # TODO: There are a lot of functions in the Python 2 version that may or may not be used.

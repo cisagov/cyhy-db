@@ -8,7 +8,6 @@ import factory
 from mimesis import Generic
 from mimesis.locales import DEFAULT_LOCALE
 from mimesis.providers.base import BaseProvider
-from mimesis_factory import MimesisField
 from pytest_factoryboy import register
 
 # cisagov Libraries
@@ -19,7 +18,6 @@ from cyhy_db.models.enum import (
     DayOfWeek,
     PocType,
     ReportPeriod,
-    ReportType,
     ScanType,
     Scheduler,
     Stage,

@@ -5,7 +5,6 @@ from typing import Dict, List
 
 # Third-Party Libraries
 from beanie import Document
-from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
 from pymongo import ASCENDING, IndexModel
 

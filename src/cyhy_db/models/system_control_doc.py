@@ -28,8 +28,11 @@ class SystemControlDoc(Document):
 
     @classmethod
     async def wait_for_completion(cls, document_id, timeout: Optional[int] = None):
-        """Wait for this control action to complete. If a timeout is set, only wait a maximum of timeout seconds.
-        Returns True if the document was completed, False otherwise."""
+        """Wait for this control action to complete.
+
+        If a timeout is set, only wait a maximum of timeout seconds.
+        Returns True if the document was completed, False otherwise.
+        """
         start_time = utcnow()
         while True:
             doc = await cls.get(document_id)

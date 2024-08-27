@@ -2,7 +2,22 @@
 from beanie import Document, View, init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
-from .models import *
+from .models import (
+    CVE,
+    HostDoc,
+    HostScanDoc,
+    KEVDoc,
+    NotificationDoc,
+    PlaceDoc,
+    PortScanDoc,
+    RequestDoc,
+    ReportDoc,
+    ScanDoc,
+    SnapshotDoc,
+    SystemControlDoc,
+    TallyDoc,
+    VulnScanDoc,
+)
 
 ALL_MODELS: list[type[Document] | type[View] | str] = [
     CVE,

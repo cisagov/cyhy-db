@@ -2,7 +2,7 @@
 from typing import Optional
 
 # Third-Party Libraries
-from beanie import Document, PydanticObjectId
+from beanie import Document
 from pydantic import ConfigDict, Field
 
 

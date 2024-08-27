@@ -1,4 +1,4 @@
-""" ScanDoc model for use as the base of other scan document classes. """
+"""ScanDoc model for use as the base of other scan document classes."""
 
 # Standard Python Libraries
 from datetime import datetime
@@ -10,11 +10,11 @@ from beanie import Document, Link
 from beanie.operators import In, Push, Set
 from bson import ObjectId
 from bson.dbref import DBRef
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import ConfigDict, Field, model_validator
 from pymongo import ASCENDING, IndexModel
 
-from .snapshot_doc import SnapshotDoc
 from ..utils import utcnow
+from .snapshot_doc import SnapshotDoc
 
 
 class ScanDoc(Document):  # TODO: Make this a BaseModel

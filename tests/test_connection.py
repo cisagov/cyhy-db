@@ -4,7 +4,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 
 # cisagov Libraries
-from cyhy_db import initialize_db
+# from cyhy_db import initialize_db
 from cyhy_db.models import CVE
 
 

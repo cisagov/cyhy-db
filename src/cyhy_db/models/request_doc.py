@@ -9,7 +9,6 @@ from beanie import (
     Document,
     Insert,
     Link,
-    PydanticObjectId,
     Replace,
     ValidateOnSave,
     before_event,
