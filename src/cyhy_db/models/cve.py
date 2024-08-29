@@ -9,7 +9,7 @@ from .enum import CVSSVersion
 
 
 class CVE(Document):
-    # Validate on assignment so ip_int is recalculated as ip is set
+    # Validate on assignment so severity is calculated
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
     # CVE ID as a string
