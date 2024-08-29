@@ -87,7 +87,7 @@ setup(
     keywords=["cyhy", "database"],
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={},
+    package_data={"cyhy_db": ["py.typed"]},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
     install_requires=[
