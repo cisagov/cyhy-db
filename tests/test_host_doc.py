@@ -16,6 +16,8 @@ def test_host_doc_init():
         ip=ip_address(VALID_IP_1_STR),
         owner="YOUR_MOM",
     )
+    # Check that the HostDoc object was created correctly
+    assert host_doc.ip == ip_address(VALID_IP_1_STR)
 
 
 async def test_save():
