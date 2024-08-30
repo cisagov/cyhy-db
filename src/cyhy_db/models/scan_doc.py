@@ -49,7 +49,9 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
 
     @classmethod
     async def reset_latest_flag_by_owner(cls, owner: str):
-        await cls.find(cls.latest == True, cls.owner == owner).update_many(
+        # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
+        # cond:'" but this is unavoidable due to Beanie syntax.
+        await cls.find(cls.latest == True, cls.owner == owner).update_many(  # noqa E712
             Set({cls.latest: False})
         )
 
@@ -71,9 +73,11 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
         else:
             ip_ints = [int(ip_address(ips))]
 
-        await cls.find(cls.latest == True, In(cls.ip_int, ip_ints)).update_many(
-            Set({cls.latest: False})
-        )
+        # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
+        # cond:'" but this is unavoidable due to Beanie syntax.
+        await cls.find(
+            cls.latest == True, In(cls.ip_int, ip_ints)  # noqa E712
+        ).update_many(Set({cls.latest: False}))
 
     @classmethod
     async def tag_latest(
@@ -89,6 +93,8 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
             ref = DBRef(SnapshotDoc.Settings.name, ObjectId(snapshot))
         else:
             raise ValueError("Invalid snapshot type")
-        await cls.find(cls.latest == True, In(cls.owner, owners)).update_many(
-            Push({cls.snapshots: ref})
-        )
+        # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
+        # cond:'" but this is unavoidable due to Beanie syntax.
+        await cls.find(
+            cls.latest == True, In(cls.owner, owners)  # noqa E712
+        ).update_many(Push({cls.snapshots: ref}))
