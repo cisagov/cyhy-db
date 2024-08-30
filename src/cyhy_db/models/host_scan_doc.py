@@ -1,3 +1,5 @@
+"""The model for CyHy host scan documents."""
+
 # Standard Python Libraries
 from typing import List
 
@@ -9,6 +11,8 @@ from . import ScanDoc
 
 
 class HostScanDoc(ScanDoc):
+    """The host scan document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     name: str
@@ -17,7 +21,8 @@ class HostScanDoc(ScanDoc):
     classes: List[dict] = []
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "host_scans"
         indexes = [
             IndexModel(

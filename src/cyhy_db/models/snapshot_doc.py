@@ -1,3 +1,5 @@
+"""The model for CyHy snapshot documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 from ipaddress import IPv4Network
@@ -12,6 +14,8 @@ from ..utils import utcnow
 
 
 class VulnerabilityCounts(BaseModel):
+    """The model for vulnerability counts."""
+
     model_config = ConfigDict(extra="forbid")
 
     critical: int = 0
@@ -22,6 +26,8 @@ class VulnerabilityCounts(BaseModel):
 
 
 class WorldData(BaseModel):
+    """The model for aggregated metrics of all CyHy entities."""
+
     model_config = ConfigDict(extra="forbid")
 
     host_count: int = 0
@@ -35,6 +41,8 @@ class WorldData(BaseModel):
 
 
 class TicketMetrics(BaseModel):
+    """The model for ticket metrics."""
+
     model_config = ConfigDict(extra="forbid")
 
     median: int = 0
@@ -42,6 +50,8 @@ class TicketMetrics(BaseModel):
 
 
 class TicketOpenMetrics(BaseModel):
+    """The model for open ticket metrics."""
+
     model_config = ConfigDict(extra="forbid")
 
     # Numbers in this section refer to how long open tix were open AT this date/time
@@ -53,6 +63,8 @@ class TicketOpenMetrics(BaseModel):
 
 
 class TicketCloseMetrics(BaseModel):
+    """The model for closed ticket metrics."""
+
     model_config = ConfigDict(extra="forbid")
 
     # Numbers in this section only include tix that closed AT/AFTER this date/time
@@ -64,6 +76,8 @@ class TicketCloseMetrics(BaseModel):
 
 
 class SnapshotDoc(Document):
+    """The snapshot document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     owner: str = Field(...)
@@ -91,7 +105,8 @@ class SnapshotDoc(Document):
     tix_msec_to_close: TicketCloseMetrics = Field(default_factory=TicketCloseMetrics)
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "snapshots"
         indexes = [
             IndexModel(

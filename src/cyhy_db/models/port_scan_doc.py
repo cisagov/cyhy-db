@@ -1,3 +1,5 @@
+"""The model for CyHy port scan documents."""
+
 # Standard Python Libraries
 from typing import Dict
 
@@ -10,6 +12,8 @@ from .enum import Protocol
 
 
 class PortScanDoc(ScanDoc):
+    """The port scan document model."""
+
     model_config = ConfigDict(extra="forbid")
     protocol: Protocol
     port: int
@@ -18,7 +22,8 @@ class PortScanDoc(ScanDoc):
     reason: str
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "port_scans"
         indexes = [
             IndexModel(

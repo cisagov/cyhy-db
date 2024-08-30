@@ -1,3 +1,5 @@
+"""The model for CyHy report documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 from typing import List
@@ -13,6 +15,8 @@ from .enum import ReportType
 
 
 class ReportDoc(Document):
+    """The report document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     owner: str
@@ -21,6 +25,8 @@ class ReportDoc(Document):
     report_types: List[ReportType]
 
     class Settings:
+        """Beanie settings."""
+
         name = "reports"
         indexes = [
             IndexModel(

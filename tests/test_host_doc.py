@@ -1,3 +1,5 @@
+"""Test HostDoc model functionality."""
+
 # Standard Python Libraries
 from ipaddress import ip_address
 
@@ -11,6 +13,7 @@ VALID_IP_2_INT = int(ip_address(VALID_IP_2_STR))
 
 
 def test_host_doc_init():
+    """Test HostDoc object initialization."""
     # Create a HostDoc object
     host_doc = HostDoc(
         ip=ip_address(VALID_IP_1_STR),
@@ -21,6 +24,7 @@ def test_host_doc_init():
 
 
 async def test_save():
+    """Test saving a HostDoc object to the database."""
     # Create a HostDoc object
     host_doc = HostDoc(
         ip=ip_address(VALID_IP_1_STR),
@@ -32,6 +36,7 @@ async def test_save():
 
 
 async def test_get_by_ip():
+    """Test finding a HostDoc object by its IP address."""
     # Find a HostDoc object by its IP address
     host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
     assert host_doc.ip == ip_address(VALID_IP_1_STR)

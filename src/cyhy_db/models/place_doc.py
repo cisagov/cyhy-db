@@ -1,3 +1,5 @@
+"""The model for place documents."""
+
 # Standard Python Libraries
 from typing import Optional
 
@@ -7,6 +9,8 @@ from pydantic import ConfigDict, Field
 
 
 class PlaceDoc(Document):
+    """The place document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     # GNIS FEATURE_ID (INCITS 446-2008) - https://geonames.usgs.gov/domestic/index.html
@@ -28,4 +32,6 @@ class PlaceDoc(Document):
     elevation_feet: Optional[int] = None
 
     class Settings:
+        """Beanie settings."""
+
         name = "places"

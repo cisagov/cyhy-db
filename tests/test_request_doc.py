@@ -6,8 +6,8 @@ from cyhy_db.models.request_doc import Agency
 
 
 async def test_init():
+    """Test RequestDoc object initialization."""
     # Create a RequestDoc object
-
     request_doc = RequestDoc(
         agency=Agency(
             name="Cybersecurity and Infrastructure Security Agency", acronym="CISA"

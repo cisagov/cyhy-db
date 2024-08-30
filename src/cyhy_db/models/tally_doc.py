@@ -1,3 +1,5 @@
+"""The model for CyHy tally documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 
@@ -9,6 +11,8 @@ from ..utils import utcnow
 
 
 class StatusCounts(BaseModel):
+    """The model for host status counts."""
+
     model_config = ConfigDict(extra="forbid")
 
     DONE: int = 0
@@ -18,6 +22,8 @@ class StatusCounts(BaseModel):
 
 
 class Counts(BaseModel):
+    """The model for scan stage counts."""
+
     model_config = ConfigDict(extra="forbid")
 
     BASESCAN: StatusCounts = Field(default_factory=StatusCounts)
@@ -28,6 +34,8 @@ class Counts(BaseModel):
 
 
 class TallyDoc(Document):
+    """The tally document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     _id: str  # owner_id
@@ -36,7 +44,10 @@ class TallyDoc(Document):
 
     @before_event(Insert, Replace, ValidateOnSave)
     async def before_save(self):
+        """Set data just prior to saving a tally document."""
         self.last_change = utcnow()
 
     class Settings:
+        """Beanie settings."""
+
         name = "tallies"

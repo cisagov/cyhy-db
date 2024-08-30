@@ -92,6 +92,7 @@ def mongodb_container(docker_client, mongo_image_tag):
 
 @pytest.fixture(autouse=True, scope="session")
 def mongo_express_container(docker_client, request):
+    """Fixture for the Mongo Express test container."""
     if not request.config.getoption("--mongo-express"):
         yield None
         return

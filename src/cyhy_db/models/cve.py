@@ -1,3 +1,5 @@
+"""The model for CVE (Common Vulnerabilities and Exposures) documents."""
+
 # Standard Python Libraries
 from typing import Any, Dict
 
@@ -9,6 +11,8 @@ from .enum import CVSSVersion
 
 
 class CVE(Document):
+    """The CVE document model."""
+
     # Validate on assignment so severity is calculated
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
@@ -20,6 +24,7 @@ class CVE(Document):
 
     @model_validator(mode="before")
     def calculate_severity(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate CVE severity based on the CVSS score and version."""
         if values["cvss_version"] == "2.0":
             if values["cvss_score"] == 10:
                 values["severity"] = 4
@@ -41,5 +46,6 @@ class CVE(Document):
         return values
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "cves"

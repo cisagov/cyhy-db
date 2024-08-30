@@ -1,3 +1,5 @@
+"""The model for CyHy request documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 from ipaddress import IPv4Network
@@ -24,6 +26,8 @@ BOGUS_ID = "bogus_id_replace_me"
 
 
 class Contact(BaseModel):
+    """A point of contact for the entity."""
+
     model_config = ConfigDict(extra="forbid")
 
     email: EmailStr
@@ -33,6 +37,8 @@ class Contact(BaseModel):
 
 
 class Location(BaseModel):
+    """A location with various geographical identifiers."""
+
     model_config = ConfigDict(extra="forbid")
 
     country_name: str
@@ -47,6 +53,8 @@ class Location(BaseModel):
 
 
 class Agency(BaseModel):
+    """Model representing a CyHy-enrolled entity."""
+
     model_config = ConfigDict(extra="forbid")
 
     name: str
@@ -57,6 +65,8 @@ class Agency(BaseModel):
 
 
 class ScanLimit(BaseModel):
+    """Scan limits for a specific scan type."""
+
     model_config = ConfigDict(extra="forbid")
 
     scan_type: ScanType = Field(..., alias="scanType")
@@ -64,6 +74,8 @@ class ScanLimit(BaseModel):
 
 
 class Window(BaseModel):
+    """A day and time window for scheduling scans."""
+
     model_config = ConfigDict(extra="forbid")
 
     day: DayOfWeek = Field(default=DayOfWeek.SUNDAY)
@@ -72,13 +84,15 @@ class Window(BaseModel):
 
     @field_validator("start")
     def validate_start(cls, v):
-        # Validate that the start time is in the format HH:MM:SS
+        """Validate that the start time is in the correct format."""
         if not re.match(r"^\d{2}:\d{2}:\d{2}$", v):
             raise ValueError("Start time must be in the format HH:MM:SS")
         return v
 
 
 class RequestDoc(Document):
+    """The request document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     id: str = Field(default=BOGUS_ID)  # type: ignore[assignment]
@@ -100,10 +114,11 @@ class RequestDoc(Document):
 
     @before_event(Insert, Replace, ValidateOnSave)
     async def set_id_to_acronym(self):
-        # Set the id to the agency acronym if it is the default value
+        """Set the id to the agency acronym if it is the default value."""
         if self.id == BOGUS_ID:
             self.id = self.agency.acronym
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "requests"

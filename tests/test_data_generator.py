@@ -1,3 +1,11 @@
+"""
+This module generates test data for CyHy reports using factory classes.
+
+It includes factories for creating instances of various models such as CVE,
+Agency, Contact, Location, Window, and RequestDoc. Additionally, it provides a
+custom provider for generating specific data like CVE IDs and IPv4 networks.
+"""
+
 # Standard Python Libraries
 from datetime import datetime
 import ipaddress
@@ -27,25 +35,38 @@ from cyhy_db.utils import utcnow
 
 
 class CyHyProvider(BaseProvider):
+    """Custom provider for generating specific CyHy data."""
+
     class Meta:
+        """Meta class for CyHyProvider."""
+
         name = "cyhy_provider"
 
     def cve_id(self, year=None):
-        # If year is None, generate a random year between 1999 and the current year
+        """
+        Generate a CVE ID.
+
+        Args:
+            year (int, optional): The year for the CVE ID. If None, a random
+            year between 1999 and the current year is used.
+
+        Returns:
+            str: A CVE ID in the format CVE-YYYY-NNNNN.
+        """
         if year is None:
             year = self.random.randint(1999, datetime.now().year)
-
-        # Generate a random number for the CVE, ensuring it has a leading zero if necessary
         number = self.random.randint(1, 99999)
-
         return f"CVE-{year}-{number:05d}"
 
     def network_ipv4(self):
-        # Generate a base IP address
+        """
+        Generate an IPv4 network.
+
+        Returns:
+            ipaddress.IPv4Network: A randomly generated IPv4 network.
+        """
         base_ip = generic.internet.ip_v4()
-        # Choose a random CIDR between 24-30 to ensure a smaller network size and avoid host bits set error
         cidr = random.randint(24, 30)
-        # Create the network address
         network = ipaddress.IPv4Network(f"{base_ip}/{cidr}", strict=False)
         return network
 
@@ -56,7 +77,11 @@ generic.add_provider(CyHyProvider)
 
 @register
 class CVEFactory(factory.Factory):
+    """Factory for creating CVE instances."""
+
     class Meta:
+        """Meta class for CVEFactory."""
+
         model = CVE
 
     id = factory.LazyFunction(lambda: generic.cyhy_provider.cve_id())
@@ -66,11 +91,14 @@ class CVEFactory(factory.Factory):
 
 
 class AgencyFactory(factory.Factory):
+    """Factory for creating Agency instances."""
+
     class Meta:
+        """Meta class for AgencyFactory."""
+
         model = Agency
 
     name = factory.Faker("company")
-    # Generate an acronym from the name
     acronym = factory.LazyAttribute(
         lambda o: "".join(word[0].upper() for word in o.name.split())
     )
@@ -82,7 +110,11 @@ class AgencyFactory(factory.Factory):
 
 
 class ContactFactory(factory.Factory):
+    """Factory for creating Contact instances."""
+
     class Meta:
+        """Meta class for ContactFactory."""
+
         model = Contact
 
     email = factory.Faker("email")
@@ -92,7 +124,11 @@ class ContactFactory(factory.Factory):
 
 
 class LocationFactory(factory.Factory):
+    """Factory for creating Location instances."""
+
     class Meta:
+        """Meta class for LocationFactory."""
+
         model = Location
 
     country_name = factory.Faker("country")
@@ -107,7 +143,11 @@ class LocationFactory(factory.Factory):
 
 
 class WindowFactory(factory.Factory):
+    """Factory for creating Window instances."""
+
     class Meta:
+        """Meta class for WindowFactory."""
+
         model = Window
 
     day = factory.LazyFunction(lambda: random.choice(list(DayOfWeek)))
@@ -116,7 +156,11 @@ class WindowFactory(factory.Factory):
 
 
 class RequestDocFactory(factory.Factory):
+    """Factory for creating RequestDoc instances."""
+
     class Meta:
+        """Meta class for RequestDocFactory."""
+
         model = RequestDoc
 
     id = factory.LazyAttribute(
@@ -139,13 +183,13 @@ class RequestDocFactory(factory.Factory):
             generic.cyhy_provider.network_ipv4() for _ in range(random.randint(1, 5))
         ]
     )
-    # create a set of 1 to 3 random scan types from the ScanType enum
     scan_types = factory.LazyFunction(
         lambda: {random.choice(list(ScanType)) for _ in range(random.randint(1, 3))}
     )
 
 
 async def test_create_cves():
+    """Test function to create and save 100 CVE instances."""
     for _ in range(100):
         cve = CVEFactory()
         print(cve)
@@ -153,6 +197,7 @@ async def test_create_cves():
 
 
 async def test_create_request_docs():
+    """Test function to create and save 100 RequestDoc instances."""
     for _ in range(100):
         request_doc = RequestDocFactory()
         print(request_doc)

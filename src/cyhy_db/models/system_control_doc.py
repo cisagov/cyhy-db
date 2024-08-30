@@ -1,3 +1,5 @@
+"""The model for CyHy system control documents."""
+
 # Standard Python Libraries
 import asyncio
 from datetime import datetime
@@ -14,6 +16,8 @@ CONTROL_DOC_POLL_INTERVAL = 5  # seconds
 
 
 class SystemControlDoc(Document):
+    """The system control document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     action: ControlAction
@@ -24,6 +28,8 @@ class SystemControlDoc(Document):
     completed: bool = False  # Set to True when after the action has occurred
 
     class Settings:
+        """Beanie settings."""
+
         name = "control"
 
     @classmethod

@@ -1,3 +1,5 @@
+"""The model for CyHy vulnerability scan documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 
@@ -10,6 +12,8 @@ from .enum import Protocol
 
 
 class VulnScanDoc(ScanDoc):
+    """The vulnerability scan document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     protocol: Protocol
@@ -31,7 +35,8 @@ class VulnScanDoc(ScanDoc):
     synopsis: str
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "vuln_scans"
         indexes = [
             IndexModel(

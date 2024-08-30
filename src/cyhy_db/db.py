@@ -1,3 +1,5 @@
+"""CyHy database top-level functions."""
+
 # Third-Party Libraries
 from beanie import Document, View, init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
@@ -38,6 +40,7 @@ ALL_MODELS: list[type[Document] | type[View] | str] = [
 
 
 async def initialize_db(db_uri: str, db_name: str) -> AsyncIOMotorDatabase:
+    """Initialize the database."""
     try:
         client: AsyncIOMotorClient = AsyncIOMotorClient(db_uri)
         db: AsyncIOMotorDatabase = client[db_name]

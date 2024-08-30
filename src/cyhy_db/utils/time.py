@@ -1,3 +1,5 @@
+"""Utility functions for working with time and dates."""
+
 # Standard Python Libraries
 from datetime import datetime, timezone
 

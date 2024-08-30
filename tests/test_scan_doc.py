@@ -18,6 +18,11 @@ VALID_IP_2_INT = int(ipaddress.ip_address(VALID_IP_2_STR))
 
 
 def test_ip_int_init():
+    """Test IP address integer conversion on initialization.
+
+    This test verifies that the IP address is correctly converted to an
+    integer when a ScanDoc object is initialized.
+    """
     # Create a ScanDoc object
     scan_doc = ScanDoc(
         ip=ipaddress.ip_address(VALID_IP_1_STR),
@@ -31,6 +36,11 @@ def test_ip_int_init():
 
 
 def test_ip_int_change():
+    """Test IP address integer conversion on IP address change.
+
+    This test verifies that the IP address is correctly converted to an
+    integer when the IP address of a ScanDoc object is changed.
+    """
     # Create a ScanDoc object
     scan_doc = ScanDoc(
         ip=ipaddress.ip_address(VALID_IP_1_STR),
@@ -46,6 +56,12 @@ def test_ip_int_change():
 
 
 def test_ip_string_set():
+    """Test IP address string conversion and integer calculation.
+
+    This test verifies that an IP address provided as a string is correctly
+    converted to an ipaddress.IPv4Address object and that the corresponding
+    integer value is calculated correctly.
+    """
     scan_doc = ScanDoc(
         ip=VALID_IP_1_STR,
         owner="YOUR_MOM",
@@ -59,6 +75,11 @@ def test_ip_string_set():
 
 
 async def test_ip_address_field_fetch():
+    """Test IP address retrieval from the database.
+
+    This test verifies that the IP address of a ScanDoc object is correctly
+    retrieved from the database.
+    """
     # Create a ScanDoc object
     scan_doc = ScanDoc(
         ip=ipaddress.ip_address(VALID_IP_1_STR),
@@ -81,6 +102,11 @@ async def test_ip_address_field_fetch():
 
 
 def test_invalid_ip_address():
+    """Test validation error for invalid IP addresses.
+
+    This test verifies that a ValidationError is raised when an invalid IP
+    address is provided to a ScanDoc object.
+    """
     with pytest.raises(ValidationError):
         ScanDoc(
             ip="999.999.999.999",  # This should be invalid
@@ -90,6 +116,11 @@ def test_invalid_ip_address():
 
 
 async def test_reset_latest_flag_by_owner():
+    """Test resetting the latest flag by owner.
+
+    This test verifies that the latest flag of ScanDoc objects is correctly
+    reset when the reset_latest_flag_by_owner method is called.
+    """
     # Create a ScanDoc object
     OWNER = "RESET_BY_OWNER"
     scan_doc = ScanDoc(
@@ -107,7 +138,11 @@ async def test_reset_latest_flag_by_owner():
 
 
 async def test_reset_latest_flag_by_ip():
-    # Create a ScanDoc object
+    """Test resetting the latest flag by IP address.
+
+    This test verifies that the latest flag of ScanDoc objects is correctly
+    reset when the reset_latest_flag_by_ip method is called.
+    """
     IP_TO_RESET_1 = ipaddress.ip_address("128.205.1.2")
     IP_TO_RESET_2 = ipaddress.ip_address("128.205.1.3")
     scan_doc_1 = ScanDoc(ip=IP_TO_RESET_1, owner="RESET_BY_IP", source="nmap")
@@ -131,8 +166,12 @@ async def test_reset_latest_flag_by_ip():
 
 
 async def test_tag_latest():
-    # Create a SnapshotDoc object
+    """Test tagging the latest scan with a snapshot.
 
+    This test verifies that the latest ScanDoc object is correctly tagged
+    with a SnapshotDoc object when the tag_latest method is called.
+    """
+    # Create a SnapshotDoc object
     owner = "TAG_LATEST"
     snapshot_doc = SnapshotDoc(
         owner=owner,

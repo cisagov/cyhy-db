@@ -18,6 +18,8 @@ from .snapshot_doc import SnapshotDoc
 
 
 class ScanDoc(Document):  # TODO: Make this a BaseModel
+    """The scan document model."""
+
     # Validate on assignment so ip_int is recalculated as ip is set
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
@@ -31,12 +33,14 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
 
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate the integer representation of an IP address."""
         # ip may still be string if it was just set
         values["ip_int"] = int(ip_address(values["ip"]))
         return values
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "scandocs"
         indexes = [
             IndexModel(
@@ -49,6 +53,7 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
 
     @classmethod
     async def reset_latest_flag_by_owner(cls, owner: str):
+        """Reset the latest flag for all scans for a given owner."""
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(cls.latest == True, cls.owner == owner).update_many(  # noqa E712
@@ -67,6 +72,7 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
             | str
         ),
     ):
+        """Reset the latest flag for all scans for a given IP address."""
         if isinstance(ips, Iterable):
             # TODO Figure out why coverage thinks this next line can exit early
             ip_ints = [int(ip_address(x)) for x in ips]
@@ -83,6 +89,7 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
     async def tag_latest(
         cls, owners: List[str], snapshot: Union["SnapshotDoc", ObjectId, str]
     ):
+        """Tag the latest scan for given owners with a snapshot id."""
         from . import SnapshotDoc
 
         if isinstance(snapshot, SnapshotDoc):

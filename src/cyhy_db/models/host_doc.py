@@ -1,3 +1,5 @@
+"""The model for CyHy host documents."""
+
 # Standard Python Libraries
 from datetime import datetime
 from ipaddress import IPv4Address, ip_address
@@ -14,11 +16,15 @@ from .enum import Stage, Status
 
 
 class State(BaseModel):
+    """The state of a host."""
+
     reason: str
     up: bool
 
 
 class HostDoc(Document):
+    """The host document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     # IP address as an integer
@@ -37,16 +43,19 @@ class HostDoc(Document):
 
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate the integer representation of an IP address."""
         # ip may still be string if it was just set
         values["_id"] = int(ip_address(values["ip"]))
         return values
 
     @before_event(Insert, Replace, ValidateOnSave)
     async def before_save(self):
+        """Set data just prior to saving a host document."""
         self.last_change = utcnow()
 
     class Settings:
-        # Beanie settings
+        """Beanie settings."""
+
         name = "hosts"
         indexes = [
             IndexModel(
@@ -124,6 +133,7 @@ class HostDoc(Document):
     @classmethod
     @deprecated("Use HostDoc.find_one(HostDoc.ip == ip) instead.")
     async def get_by_ip(cls, ip: IPv4Address):
+        """Return a host document with the given IP address."""
         return await cls.find_one(cls.ip == ip)
 
     # @classmethod

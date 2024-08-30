@@ -1,3 +1,5 @@
+"""The model for notification documents."""
+
 # Standard Python Libraries
 from typing import List
 
@@ -7,6 +9,8 @@ from pydantic import ConfigDict, Field
 
 
 class NotificationDoc(Document):
+    """The notification document model."""
+
     model_config = ConfigDict(extra="forbid")
 
     ticket_id: BeanieObjectId = Field(...)  # ticket id that triggered the notification
@@ -16,4 +20,6 @@ class NotificationDoc(Document):
     )  # list of owners built as notifications are generated
 
     class Settings:
+        """Beanie settings."""
+
         name = "notifications"
