@@ -19,6 +19,5 @@ async def test_connection_motor(db_uri, db_name):
 async def test_connection_beanie():
     """Test a simple database query."""
     # Attempt to find a document in the empty CVE collection
-    # await initialize_db(db_uri, db_name)  # Manually initialize for testing
     result = await CVE.get("CVE-2024-DOES-NOT-EXIST")
     assert result is None, "Expected no document to be found"
