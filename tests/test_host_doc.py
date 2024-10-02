@@ -5,6 +5,7 @@ from ipaddress import ip_address
 
 # cisagov Libraries
 from cyhy_db.models import HostDoc
+from cyhy_db.models.host_doc import State
 
 VALID_IP_1_STR = "0.0.0.1"
 VALID_IP_2_STR = "0.0.0.2"
@@ -40,3 +41,27 @@ async def test_get_by_ip():
     # Find a HostDoc object by its IP address
     host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
     assert host_doc.ip == ip_address(VALID_IP_1_STR)
+
+
+async def test_set_state_open_ports():
+    """Test setting HostDoc state with open ports."""
+    # Find a HostDoc object by its IP address
+    host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
+    host_doc.set_state(nmap_says_up=None, has_open_ports=True)
+    assert host_doc.state == State(up=True, reason="open-port")
+
+
+async def test_set_state_no_open_ports():
+    """Test setting HostDoc state with no open ports."""
+    # Find a HostDoc object by its IP address
+    host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
+    host_doc.set_state(nmap_says_up=None, has_open_ports=False)
+    assert host_doc.state == State(up=False, reason="no-open")
+
+
+async def test_set_state_nmap_says_down():
+    """Test setting HostDoc state when nmap says the host is down."""
+    # Find a HostDoc object by its IP address
+    host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
+    host_doc.set_state(nmap_says_up=False, has_open_ports=None, reason="no-reply")
+    assert host_doc.state == State(up=False, reason="no-reply")
