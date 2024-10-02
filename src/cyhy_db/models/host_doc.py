@@ -114,11 +114,11 @@ class HostDoc(Document):
         either argument can be None.
         """
         if has_open_ports:  # Only PORTSCAN sends in has_open_ports
-            self.state = State(True, "open-port")
+            self.state = State(up=True, reason="open-port")
         elif has_open_ports is False:
-            self.state = State(False, "no-open")
+            self.state = State(up=False, reason="no-open")
         elif nmap_says_up is False:  # NETSCAN says host is down
-            self.state = State(False, reason)
+            self.state = State(up=False, reason=reason)
 
     # TODO: There are a lot of functions in the Python 2 version that may or may not be used.
     #       Instead of porting them all over, we should just port them as they are needed.
