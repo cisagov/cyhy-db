@@ -38,7 +38,7 @@ class TallyDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
-    _id: str  # owner_id
+    id: str  # owner_id
     counts: Counts = Field(default_factory=Counts)
     last_change: datetime = Field(default_factory=utcnow)
 
