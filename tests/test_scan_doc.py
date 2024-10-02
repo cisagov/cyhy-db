@@ -165,14 +165,14 @@ async def test_reset_latest_flag_by_ip():
     assert scan_doc_2.latest is False
 
 
-async def test_tag_latest():
-    """Test tagging the latest scan with a snapshot.
+async def test_tag_latest_snapshot_doc():
+    """Test tagging the latest scan with a SnapshotDoc.
 
-    This test verifies that the latest ScanDoc object is correctly tagged
-    with a SnapshotDoc object when the tag_latest method is called.
+    This test verifies that the latest ScanDoc object is correctly tagged with a
+    SnapshotDoc object when the tag_latest method is called with a SnapshotDoc.
     """
     # Create a SnapshotDoc object
-    owner = "TAG_LATEST"
+    owner = "TAG_LATEST_SNAPSHOT_DOC"
     snapshot_doc = SnapshotDoc(
         owner=owner,
         start_time=utcnow(),
@@ -195,3 +195,90 @@ async def test_tag_latest():
 
     # Check that the scan now has a snapshot
     assert scan_doc.snapshots == [snapshot_doc], "Snapshot not added to scan"
+
+
+async def test_tag_latest_snapshot_id():
+    """Test tagging the latest scan with a snapshot ObjectId.
+
+    This test verifies that the latest ScanDoc object is correctly tagged with a
+    SnapshotDoc object when the tag_latest method is called with a snapshot
+    ObjectId.
+    """
+    # Create a SnapshotDoc object
+    owner = "TAG_LATEST_SNAPSHOT_ID"
+    snapshot_doc = SnapshotDoc(
+        owner=owner,
+        start_time=utcnow(),
+        end_time=utcnow(),
+    )
+    await snapshot_doc.save()
+    # Create a ScanDoc object
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc.save()
+
+    # Tag the latest scan with the snapshot id
+    await ScanDoc.tag_latest([owner], snapshot_doc.id)
+
+    # Retrieve the ScanDoc object from the database
+    scan_doc = await ScanDoc.find_one(ScanDoc.id == scan_doc.id, fetch_links=True)
+
+    # Check that the scan now has a snapshot
+    assert scan_doc.snapshots == [snapshot_doc], "Snapshot not added to scan"
+
+
+async def test_tag_latest_snapshot_id_str():
+    """Test tagging the latest scan with the string representation of a snapshot ObjectId.
+
+    This test verifies that the latest ScanDoc object is correctly tagged with a
+    SnapshotDoc object when the tag_latest method is called with the string
+    representation of a snapshot ObjectId.
+    """
+    # Create a SnapshotDoc object
+    owner = "TAG_LATEST_SNAPSHOT_ID_STR"
+    snapshot_doc = SnapshotDoc(
+        owner=owner,
+        start_time=utcnow(),
+        end_time=utcnow(),
+    )
+    await snapshot_doc.save()
+    # Create a ScanDoc object
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc.save()
+
+    # Tag the latest scan with the string representation of the snapshot id
+    await ScanDoc.tag_latest([owner], str(snapshot_doc.id))
+
+    # Retrieve the ScanDoc object from the database
+    scan_doc = await ScanDoc.find_one(ScanDoc.id == scan_doc.id, fetch_links=True)
+
+    # Check that the scan now has a snapshot
+    assert scan_doc.snapshots == [snapshot_doc], "Snapshot not added to scan"
+
+
+async def test_tag_latest_invalid_type():
+    """Test tagging the latest scan with an invalid object type."""
+    owner = "TAG_LATEST_INVALID_TYPE"
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc.save()
+
+    with pytest.raises(ValueError, match="Invalid snapshot type"):
+        # Attempt to tag the latest scan with an invalid object type
+        await ScanDoc.tag_latest([owner], 12345)
+
+    # Retrieve the ScanDoc object from the database
+    scan_doc = await ScanDoc.find_one(ScanDoc.id == scan_doc.id, fetch_links=True)
+
+    # Confirm that the scan does not have a snapshot
+    assert scan_doc.snapshots == [], "Scan should not have any snapshots"
