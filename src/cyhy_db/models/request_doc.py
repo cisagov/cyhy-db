@@ -1,9 +1,8 @@
 """The model for CyHy request documents."""
 
 # Standard Python Libraries
-from datetime import datetime
+from datetime import datetime, time
 from ipaddress import IPv4Network
-import re
 from typing import List, Optional
 
 # Third-Party Libraries
@@ -80,14 +79,21 @@ class Window(BaseModel):
 
     day: DayOfWeek = Field(default=DayOfWeek.SUNDAY)
     duration: int = Field(default=168, ge=0, le=168)
-    start: str = Field(default="00:00:00")
+    start: time = Field(default=time(0, 0, 0))
 
-    @field_validator("start")
-    def validate_start(cls, v):
-        """Validate that the start time is in the correct format."""
-        if not re.match(r"^\d{2}:\d{2}:\d{2}$", v):
-            raise ValueError("Start time must be in the format HH:MM:SS")
-        return v
+    @field_validator("start", mode="before")
+    @classmethod
+    def parse_time(cls, v):
+        """Parse and validate a time representation."""
+        if isinstance(v, str):
+            # Parse the string to datetime.time
+            return datetime.strptime(v, "%H:%M:%S").time()
+        elif isinstance(v, time):
+            return v
+        else:
+            raise ValueError(
+                "Invalid time format. Expected a string in '%H:%M:%S' format or datetime.time instance."
+            )
 
 
 class RequestDoc(Document):
@@ -121,4 +127,7 @@ class RequestDoc(Document):
     class Settings:
         """Beanie settings."""
 
+        bson_encoders = {
+            time: lambda value: value.strftime("%H:%M:%S")
+        }  # Register custom encoder for datetime.time
         name = "requests"
