@@ -17,7 +17,8 @@ from ..utils import utcnow
 from .snapshot_doc import SnapshotDoc
 
 
-class ScanDoc(Document):  # TODO: Make this a BaseModel
+# TODO: Figure out how to make this an abstract base class. BaseModel?
+class ScanDoc(Document):
     """The scan document model."""
 
     # Validate on assignment so ip_int is recalculated as ip is set
