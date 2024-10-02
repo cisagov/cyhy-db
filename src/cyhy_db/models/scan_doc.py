@@ -74,7 +74,6 @@ class ScanDoc(Document):  # TODO: Make this a BaseModel
     ):
         """Reset the latest flag for all scans for a given IP address."""
         if isinstance(ips, Iterable):
-            # TODO Figure out why coverage thinks this next line can exit early
             ip_ints = [int(ip_address(x)) for x in ips]
         else:
             ip_ints = [int(ip_address(ips))]
