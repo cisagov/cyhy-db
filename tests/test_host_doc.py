@@ -65,3 +65,25 @@ async def test_set_state_nmap_says_down():
     host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_1_STR))
     host_doc.set_state(nmap_says_up=False, has_open_ports=None, reason="no-reply")
     assert host_doc.state == State(up=False, reason="no-reply")
+
+
+async def test_set_state_no_op():
+    """Test setting HostDoc state when inputs are supplied that results in no state change."""
+    # Create a HostDoc object
+    host_doc = HostDoc(
+        ip=ip_address(VALID_IP_2_STR),
+        owner="NO-OP",
+    )
+    # Save the HostDoc object to the database
+    await host_doc.save()
+    assert host_doc.id == VALID_IP_2_INT
+
+    # Find HostDoc object by its IP address
+    host_doc = await HostDoc.get_by_ip(ip_address(VALID_IP_2_INT))
+    assert host_doc.state == State(up=False, reason="new")
+
+    host_doc.set_state(nmap_says_up=True, has_open_ports=None, reason="no-op-test-1")
+    assert host_doc.state == State(up=False, reason="new")
+
+    host_doc.set_state(nmap_says_up=None, has_open_ports=None, reason="no-op-test-2")
+    assert host_doc.state == State(up=False, reason="new")
