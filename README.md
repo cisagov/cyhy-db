@@ -40,9 +40,6 @@ Mongo Express is accessible at http://admin:pass@localhost:8081
 Press Enter to stop Mongo Express and MongoDB containers...
 ```
 
-Note that the previous command will execute all of the `cyhy-db` unit tests,
-which will create a variety of collections and documents.
-
 Based on the example output above, you can access the MongoDB instance at
 `mongodb://mongoadmin:secret@localhost:32859` and the Mongo Express web
 interface at `http://admin:pass@localhost:8081`.  Note that the MongoDB
