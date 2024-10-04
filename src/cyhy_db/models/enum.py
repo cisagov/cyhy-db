@@ -114,8 +114,8 @@ class Status(Enum):
     WAITING = "WAITING"
 
 
-class TicketEvent(Enum):
-    """Ticket events."""
+class TicketAction(Enum):
+    """Actions for ticket events."""
 
     CHANGED = "CHANGED"
     CLOSED = "CLOSED"
