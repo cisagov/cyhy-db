@@ -14,10 +14,10 @@ from .models import (
     PortScanDoc,
     ReportDoc,
     RequestDoc,
-    ScanDoc,
     SnapshotDoc,
     SystemControlDoc,
     TallyDoc,
+    TicketDoc,
     VulnScanDoc,
 )
 
@@ -31,12 +31,15 @@ ALL_MODELS: list[type[Document] | type[View] | str] = [
     PortScanDoc,
     RequestDoc,
     ReportDoc,
-    ScanDoc,
     SnapshotDoc,
     SystemControlDoc,
     TallyDoc,
+    TicketDoc,
     VulnScanDoc,
 ]
+
+# Note: ScanDoc is intentionally excluded from the list of models to be imported
+# or initialized because it is an abstract base class.
 
 
 async def initialize_db(db_uri: str, db_name: str) -> AsyncIOMotorDatabase:

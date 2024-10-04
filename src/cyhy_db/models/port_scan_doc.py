@@ -25,7 +25,7 @@ class PortScanDoc(ScanDoc):
         """Beanie settings."""
 
         name = "port_scans"
-        indexes = ScanDoc.Settings.indexes + [
+        indexes = ScanDoc.Abstract_Settings.indexes + [
             IndexModel(
                 [("latest", ASCENDING), ("owner", ASCENDING), ("state", ASCENDING)],
                 name="latest_owner_state",

@@ -1,6 +1,7 @@
 """ScanDoc model for use as the base of other scan document classes."""
 
 # Standard Python Libraries
+from abc import ABC
 from datetime import datetime
 from ipaddress import IPv4Address, ip_address
 from typing import Any, Dict, Iterable, List, Union
@@ -17,9 +18,8 @@ from ..utils import utcnow
 from .snapshot_doc import SnapshotDoc
 
 
-# TODO: Figure out how to make this an abstract base class. BaseModel?
-class ScanDoc(Document):
-    """The scan document model."""
+class ScanDoc(Document, ABC):
+    """The abstract base class for scan-like documents."""
 
     # Validate on assignment so ip_int is recalculated as ip is set
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
@@ -40,9 +40,22 @@ class ScanDoc(Document):
         return values
 
     class Settings:
-        """Beanie settings."""
+        """Beanie settings to be used during testing."""
 
-        name = "scandocs"
+        # These settings are intended for use only during testing.  See
+        # Abstract_Settings below.
+
+        name = "PyTest_ScanDocs"
+
+    class Abstract_Settings:
+        """Beanie settings to be inherited by subclasses."""
+
+        # This class is intentionally not named "Settings" to prevent Beanie from
+        # automatically applying these indices, which would result in the creation of
+        # an unnecessary collection. Instead, subclasses should define their own
+        # "Settings" class and include these indices along with any additional
+        # subclass-specific indices.
+
         indexes = [
             IndexModel(
                 [("latest", ASCENDING), ("ip_int", ASCENDING)], name="latest_ip"

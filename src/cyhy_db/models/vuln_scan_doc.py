@@ -38,7 +38,7 @@ class VulnScanDoc(ScanDoc):
         """Beanie settings."""
 
         name = "vuln_scans"
-        indexes = ScanDoc.Settings.indexes + [
+        indexes = ScanDoc.Abstract_Settings.indexes + [
             IndexModel(
                 [("owner", ASCENDING), ("latest", ASCENDING), ("severity", ASCENDING)],
                 name="owner_latest_severity",

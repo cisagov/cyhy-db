@@ -1,4 +1,4 @@
-"""Test ScanDoc model functionality."""
+"""Test ScanDoc abstract base class model functionality."""
 
 # Standard Python Libraries
 import ipaddress
@@ -15,6 +15,10 @@ VALID_IP_1_STR = "0.0.0.1"
 VALID_IP_2_STR = "0.0.0.2"
 VALID_IP_1_INT = int(ipaddress.ip_address(VALID_IP_1_STR))
 VALID_IP_2_INT = int(ipaddress.ip_address(VALID_IP_2_STR))
+
+# Note: Running these tests will create a "ScanDoc" collection in the database.
+# This collection is typically not created in a production environment since
+# ScanDoc is an abstract base class.
 
 
 def test_ip_int_init():
