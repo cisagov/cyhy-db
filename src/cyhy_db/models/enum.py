@@ -56,7 +56,7 @@ class PocType(Enum):
 
 
 class Protocol(Enum):
-    """Protocols."""
+    """Network protocols."""
 
     TCP = "tcp"
     UDP = "udp"
