@@ -25,6 +25,7 @@ from .place_doc import PlaceDoc
 from .request_doc import RequestDoc
 from .system_control_doc import SystemControlDoc
 from .tally_doc import TallyDoc
+from .ticket_doc import TicketDoc
 
 
 __all__ = [
@@ -41,5 +42,6 @@ __all__ = [
     "SnapshotDoc",
     "SystemControlDoc",
     "TallyDoc",
+    "TicketDoc",
     "VulnScanDoc",
 ]
