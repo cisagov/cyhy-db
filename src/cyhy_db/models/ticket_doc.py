@@ -258,6 +258,6 @@ class TicketDoc(Document):
     @classmethod
     async def remove_tag(cls, snapshot_oid):
         """Remove the specified snapshot object ID from the snapshots field of all tickets whose snapshots field contain that snapshot object ID."""
-        await cls.find(In(cls.snapshots, snapshot_oid)).update_many(
+        await cls.find(In(cls.snapshots, [snapshot_oid])).update_many(
             Pull({cls.snapshots: snapshot_oid})
         )
