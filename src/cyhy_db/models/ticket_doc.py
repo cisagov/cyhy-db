@@ -39,7 +39,7 @@ class TicketEvent(BaseModel):
     """The ticket event model."""
 
     action: TicketAction
-    delta: Optional[EventDelta] = Field(default_factory=EventDelta())
+    delta: Optional[EventDelta] = Field(default=None)
     reason: str = Field(...)
     reference: BeanieObjectId = Field(...)
     time: datetime
