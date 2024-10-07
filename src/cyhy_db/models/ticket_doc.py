@@ -129,7 +129,7 @@ class TicketDoc(Document):
         )
         if delta:
             event.delta = delta
-        self["events"].append(event)
+        self.events.append(event)
 
     def false_positive_dates(self):
         """Return most recent false positive effective and expiration dates (if any)."""
