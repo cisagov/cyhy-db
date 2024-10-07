@@ -200,7 +200,7 @@ class TicketDoc(Document):
             )
         return vuln
 
-    async def set_false_positive(self, new_state: bool, reason: str, expire_days: int):
+    def set_false_positive(self, new_state: bool, reason: str, expire_days: int):
         """Mark a ticket as a false positive."""
         if self.false_positive == new_state:
             return
