@@ -242,9 +242,11 @@ class TicketDoc(Document):
     @classmethod
     async def tag_open(cls, owners, snapshot_oid):
         """Add a snapshot object ID to the snapshots field of all open tickets belonging to the specified owners."""
-        await cls.find(cls.open is True, In(cls.owner, owners)).update_many(
-            Push({cls.snapshots: snapshot_oid})
-        )
+        # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
+        # cond:'" but this is unavoidable due to Beanie syntax.
+        await cls.find(
+            cls.open == True, In(cls.owner, owners)  # noqa E712
+        ).update_many(Push({cls.snapshots: snapshot_oid}))
 
     @classmethod
     async def tag_matching(cls, existing_snapshot_oids, new_snapshot_oid):
