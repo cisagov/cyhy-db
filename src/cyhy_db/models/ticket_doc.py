@@ -30,7 +30,7 @@ from .exceptions import PortScanNotFoundException, VulnScanNotFoundException
 class EventDelta(BaseModel):
     """The event delta model."""
 
-    from_: Optional[bool | float | int | str] = Field(..., alias="from")
+    from_: Optional[bool | float | int | str] = Field(..., serialization_alias="from")
     key: str = Field(...)
     to: Optional[bool | float | int | str] = Field(...)
 
