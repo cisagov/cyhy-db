@@ -98,7 +98,6 @@ class Scheduler(StrEnum):
 class Stage(StrEnum):
     """CyHy scan stages."""
 
-    BASESCAN = auto()  # TODO: Delete if unused
     NETSCAN1 = auto()
     NETSCAN2 = auto()
     PORTSCAN = auto()
