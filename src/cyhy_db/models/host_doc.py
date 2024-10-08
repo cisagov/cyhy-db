@@ -124,41 +124,8 @@ class HostDoc(Document):
     #       Instead of porting them all over, we should just port them as they are needed.
     #       And rewrite things that can be done better in Python 3.
 
-    # @classmethod
-    # async def get_count(cls, owner: str, stage: Stage, status: Status):
-    #     return await cls.count(
-    #         cls.owner == owner, cls.stage == stage, cls.status == status
-    #     )
-
     @classmethod
     @deprecated("Use HostDoc.find_one(HostDoc.ip == ip) instead.")
     async def get_by_ip(cls, ip: IPv4Address):
         """Return a host document with the given IP address."""
         return await cls.find_one(cls.ip == ip)
-
-    # @classmethod
-    # @deprecated("Use HostDoc.find_one(HostDoc.ip == ip).owner instead.")
-    # async def get_owner_of_ip(cls, ip: IPv4Address):
-    #     host = await cls.get_by_ip(ip)
-    #     return host.owner
-
-    # @classmethod
-    # async def get_some_for_stage(
-    #     cls,
-    #     stage: Stage,
-    #     count: int,
-    #     owner: Optional[str] = None,
-    #     waiting: bool = False,
-    # ):
-    #     if waiting:
-    #         status = {"$in": [Status.READY, Status.WAITING]}
-    #     else:
-    #         status = Status.READY
-
-    #     query = cls.find(cls.status == status, cls.stage == stage)
-    #     if owner is not None:
-    #         query = query.find(cls.owner == owner)
-
-    #     # Sorting and limiting the results
-    #     results = await query.sort([("priority", 1), ("r", 1)]).limit(count).to_list()
-    #     return results
