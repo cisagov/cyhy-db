@@ -1,125 +1,125 @@
 """The enumerations used in CyHy."""
 
 # Standard Python Libraries
-from enum import Enum
+from enum import StrEnum, auto
 
 
-class AgencyType(Enum):
+class AgencyType(StrEnum):
     """Agency types."""
 
-    FEDERAL = "FEDERAL"
-    LOCAL = "LOCAL"
-    PRIVATE = "PRIVATE"
-    STATE = "STATE"
-    TERRITORIAL = "TERRITORIAL"
-    TRIBAL = "TRIBAL"
+    FEDERAL = auto()
+    LOCAL = auto()
+    PRIVATE = auto()
+    STATE = auto()
+    TERRITORIAL = auto()
+    TRIBAL = auto()
 
 
-class ControlAction(Enum):
+class ControlAction(StrEnum):
     """Commander control actions."""
 
-    PAUSE = "PAUSE"
-    STOP = "STOP"
+    PAUSE = auto()
+    STOP = auto()
 
 
-class ControlTarget(Enum):
+class ControlTarget(StrEnum):
     """Commander control targets."""
 
-    COMMANDER = "COMMANDER"
+    COMMANDER = auto()
 
 
-class CVSSVersion(Enum):
+class CVSSVersion(StrEnum):
     """CVSS versions."""
 
-    V2 = "2.0"
-    V3 = "3.0"
-    V3_1 = "3.1"
+    V2 = auto()
+    V3 = auto()
+    V3_1 = auto()
 
 
-class DayOfWeek(Enum):
+class DayOfWeek(StrEnum):
     """Days of the week."""
 
-    MONDAY = "MONDAY"
-    TUESDAY = "TUESDAY"
-    WEDNESDAY = "WEDNESDAY"
-    THURSDAY = "THURSDAY"
-    FRIDAY = "FRIDAY"
-    SATURDAY = "SATURDAY"
-    SUNDAY = "SUNDAY"
+    MONDAY = auto()
+    TUESDAY = auto()
+    WEDNESDAY = auto()
+    THURSDAY = auto()
+    FRIDAY = auto()
+    SATURDAY = auto()
+    SUNDAY = auto()
 
 
-class PocType(Enum):
+class PocType(StrEnum):
     """Point of contact types."""
 
-    DISTRO = "DISTRO"
-    TECHNICAL = "TECHNICAL"
+    DISTRO = auto()
+    TECHNICAL = auto()
 
 
-class Protocol(Enum):
+class Protocol(StrEnum):
     """Network protocols."""
 
-    TCP = "tcp"
-    UDP = "udp"
+    TCP = auto()
+    UDP = auto()
 
 
-class ReportPeriod(Enum):
+class ReportPeriod(StrEnum):
     """CyHy reporting periods."""
 
-    MONTHLY = "MONTHLY"
-    QUARTERLY = "QUARTERLY"
-    WEEKLY = "WEEKLY"
+    MONTHLY = auto()
+    QUARTERLY = auto()
+    WEEKLY = auto()
 
 
-class ReportType(Enum):
+class ReportType(StrEnum):
     """CyHy report types."""
 
-    BOD = "BOD"
-    CYBEX = "CYBEX"
-    CYHY = "CYHY"
-    CYHY_THIRD_PARTY = "CYHY_THIRD_PARTY"
-    DNSSEC = "DNSSEC"
-    PHISHING = "PHISHING"
+    BOD = auto()
+    CYBEX = auto()
+    CYHY = auto()
+    CYHY_THIRD_PARTY = auto()
+    DNSSEC = auto()
+    PHISHING = auto()
 
 
-class ScanType(Enum):
+class ScanType(StrEnum):
     """CyHy scan types."""
 
-    CYHY = "CYHY"
-    DNSSEC = "DNSSEC"
-    PHISHING = "PHISHING"
+    CYHY = auto()
+    DNSSEC = auto()
+    PHISHING = auto()
 
 
-class Scheduler(Enum):
+class Scheduler(StrEnum):
     """CyHy schedulers."""
 
-    PERSISTENT1 = "PERSISTENT1"
+    PERSISTENT1 = auto()
 
 
-class Stage(Enum):
+class Stage(StrEnum):
     """CyHy scan stages."""
 
-    BASESCAN = "BASESCAN"  # TODO: Delete if unused
-    NETSCAN1 = "NETSCAN1"
-    NETSCAN2 = "NETSCAN2"
-    PORTSCAN = "PORTSCAN"
-    VULNSCAN = "VULNSCAN"
+    BASESCAN = auto()  # TODO: Delete if unused
+    NETSCAN1 = auto()
+    NETSCAN2 = auto()
+    PORTSCAN = auto()
+    VULNSCAN = auto()
 
 
-class Status(Enum):
+class Status(StrEnum):
     """CyHy scan statuses."""
 
-    DONE = "DONE"
-    READY = "READY"
-    RUNNING = "RUNNING"
-    WAITING = "WAITING"
+    DONE = auto()
+    READY = auto()
+    RUNNING = auto()
+    WAITING = auto()
 
 
-class TicketAction(Enum):
+class TicketAction(StrEnum):
     """Actions for ticket events."""
 
-    CHANGED = "CHANGED"
-    CLOSED = "CLOSED"
-    OPENED = "OPENED"
-    REOPENED = "REOPENED"
-    UNVERIFIED = "UNVERIFIED"
-    VERIFIED = "VERIFIED"
+    CHANGED = auto()
+    CLOSED = auto()
+    OPENED = auto()
+    REOPENED = auto()
+    UNVERIFIED = auto()
+    VERIFIED = auto()

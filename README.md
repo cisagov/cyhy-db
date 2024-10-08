@@ -9,7 +9,7 @@ This repository implements a Python module for interacting with a Cyber Hygiene 
 
 ## Pre-requisites ##
 
-- [Python 3.10](https://www.python.org/downloads/) or newer
+- [Python 3.11](https://www.python.org/downloads/) or newer
 - A running [MongoDB](https://www.mongodb.com/) instance that you have access to
 
 ## Starting a Local MongoDB Instance for Testing ##
