@@ -118,7 +118,11 @@ class TicketDoc(Document):
 
     def add_event(self, action, reason, reference=None, time=None, delta=None):
         """Add an event to the list of ticket events."""
-        if action not in TicketAction:
+        try:
+            action = TicketAction(action)
+            # If action is not in the enumerated TicketAction class, Python 3.10
+            # and 3.11 throw a TypeError, while Python 3.12 throws a ValueError
+        except (TypeError, ValueError):
             raise Exception(
                 'Invalid action "' + action + '" cannot be added to ticket events.'
             )
