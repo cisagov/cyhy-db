@@ -41,7 +41,7 @@ class TicketEvent(BaseModel):
     action: TicketAction
     delta: Optional[EventDelta] = Field(default=None)
     reason: str = Field(...)
-    reference: BeanieObjectId = Field(...)
+    reference: Optional[BeanieObjectId] = Field(default=None)
     time: datetime
 
 
