@@ -6,20 +6,21 @@ import pytest
 
 # cisagov Libraries
 from cyhy_db.models import CVE
+from cyhy_db.models.enum import CVSSVersion
 
 severity_params = [
-    ("2.0", 10, 4),
-    ("2.0", 7.0, 3),
-    ("2.0", 4.0, 2),
-    ("2.0", 0.0, 1),
-    ("3.0", 9.0, 4),
-    ("3.0", 7.0, 3),
-    ("3.0", 4.0, 2),
-    ("3.0", 0.0, 1),
-    ("3.1", 9.0, 4),
-    ("3.1", 7.0, 3),
-    ("3.1", 4.0, 2),
-    ("3.1", 0.0, 1),
+    (CVSSVersion.V2, 10, 4),
+    (CVSSVersion.V2, 7.0, 3),
+    (CVSSVersion.V2, 4.0, 2),
+    (CVSSVersion.V2, 0.0, 1),
+    (CVSSVersion.V3, 9.0, 4),
+    (CVSSVersion.V3, 7.0, 3),
+    (CVSSVersion.V3, 4.0, 2),
+    (CVSSVersion.V3, 0.0, 1),
+    (CVSSVersion.V3_1, 9.0, 4),
+    (CVSSVersion.V3_1, 7.0, 3),
+    (CVSSVersion.V3_1, 4.0, 2),
+    (CVSSVersion.V3_1, 0.0, 1),
 ]
 
 
@@ -36,12 +37,12 @@ def test_calculate_severity(version, score, expected_severity):
 def test_invalid_cvss_score(bad_score):
     """Test that an invalid CVSS score raises a ValueError."""
     with pytest.raises(ValidationError):
-        CVE(cvss_version="3.1", cvss_score=bad_score, id="test-cve")
+        CVE(cvss_version=CVSSVersion.V3_1, cvss_score=bad_score, id="test-cve")
 
 
 async def test_save():
     """Test that the severity is calculated correctly on save."""
-    cve = CVE(cvss_version="3.1", cvss_score=9.0, id="test-cve")
+    cve = CVE(cvss_version=CVSSVersion.V3_1, cvss_score=9.0, id="test-cve")
     await cve.save()  # Saving the object
     saved_cve = await CVE.get("test-cve")  # Retrieving the object
 
