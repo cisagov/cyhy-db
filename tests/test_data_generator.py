@@ -19,7 +19,7 @@ from mimesis.providers.base import BaseProvider
 from pytest_factoryboy import register
 
 # cisagov Libraries
-from cyhy_db.models import CVE, RequestDoc
+from cyhy_db.models import CVEDoc, RequestDoc
 from cyhy_db.models.enum import (
     AgencyType,
     CVSSVersion,
@@ -86,7 +86,7 @@ class CVEFactory(factory.Factory):
     class Meta:
         """Meta class for CVEFactory."""
 
-        model = CVE
+        model = CVEDoc
 
     id = factory.LazyFunction(lambda: generic.cyhy_provider.cve_id())
     # The following lines generate warnings from bandit about "Standard

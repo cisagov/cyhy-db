@@ -9,7 +9,7 @@ import pytest
 
 # cisagov Libraries
 from cyhy_db.db import ALL_MODELS, initialize_db
-from cyhy_db.models import CVE
+from cyhy_db.models import CVEDoc
 
 
 async def test_connection_motor(db_uri, db_name):
@@ -23,7 +23,7 @@ async def test_connection_motor(db_uri, db_name):
 async def test_connection_beanie():
     """Test a simple database query."""
     # Attempt to find a document in the empty CVE collection
-    result = await CVE.get("CVE-2024-DOES-NOT-EXIST")
+    result = await CVEDoc.get("CVE-2024-DOES-NOT-EXIST")
     assert result is None, "Expected no document to be found"
 
 

@@ -10,7 +10,7 @@ from pydantic import ConfigDict, Field, model_validator
 from .enum import CVSSVersion
 
 
-class CVE(Document):
+class CVEDoc(Document):
     """The CVE document model."""
 
     # Validate on assignment so severity is calculated

@@ -5,7 +5,7 @@ from beanie import Document, View, init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 
 from .models import (
-    CVE,
+    CVEDoc,
     HostDoc,
     HostScanDoc,
     KEVDoc,
@@ -22,7 +22,7 @@ from .models import (
 )
 
 ALL_MODELS: list[type[Document] | type[View] | str] = [
-    CVE,
+    CVEDoc,
     HostDoc,
     HostScanDoc,
     KEVDoc,

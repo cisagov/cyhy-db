@@ -17,7 +17,7 @@ from .snapshot_doc import SnapshotDoc
 from .report_doc import ReportDoc
 
 # Other documents
-from .cve import CVE
+from .cve_doc import CVEDoc
 from .host_doc import HostDoc
 from .kev_doc import KEVDoc
 from .notification_doc import NotificationDoc
@@ -29,7 +29,7 @@ from .ticket_doc import TicketDoc
 
 
 __all__ = [
-    "CVE",
+    "CVEDoc",
     "HostDoc",
     "HostScanDoc",
     "KEVDoc",
