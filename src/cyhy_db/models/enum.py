@@ -31,9 +31,9 @@ class ControlTarget(StrEnum):
 class CVSSVersion(StrEnum):
     """CVSS versions."""
 
-    V2 = auto()
-    V3 = auto()
-    V3_1 = auto()
+    V2 = "2.0"
+    V3 = "3.0"
+    V3_1 = "3.1"
 
 
 class DayOfWeek(StrEnum):
