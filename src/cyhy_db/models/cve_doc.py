@@ -25,7 +25,7 @@ class CVEDoc(Document):
     @model_validator(mode="before")
     def calculate_severity(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """Calculate CVE severity based on the CVSS score and version."""
-        if values["cvss_version"] == "2.0":
+        if values["cvss_version"] == CVSSVersion.V2:
             if values["cvss_score"] == 10:
                 values["severity"] = 4
             elif values["cvss_score"] >= 7.0:
