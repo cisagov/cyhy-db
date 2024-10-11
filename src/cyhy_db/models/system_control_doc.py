@@ -21,11 +21,11 @@ class SystemControlDoc(Document):
     model_config = ConfigDict(extra="forbid")
 
     action: ControlAction
+    completed: bool = False  # Set to True when after the action has occurred
+    reason: str  # Free-form, for UI / Logging
     sender: str  # Free-form, for UI / Logging
     target: ControlTarget
-    reason: str  # Free-form, for UI / Logging
     time: datetime = Field(default_factory=utcnow)  # creation time
-    completed: bool = False  # Set to True when after the action has occurred
 
     class Settings:
         """Beanie settings."""

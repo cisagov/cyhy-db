@@ -16,9 +16,6 @@ class VulnScanDoc(ScanDoc):
 
     model_config = ConfigDict(extra="forbid")
 
-    protocol: Protocol
-    port: int
-    service: str
     cvss_base_score: float
     cvss_vector: str
     description: str
@@ -29,7 +26,10 @@ class VulnScanDoc(ScanDoc):
     plugin_name: str
     plugin_publication_date: datetime
     plugin_type: str
+    port: int
+    protocol: Protocol
     risk_factor: str
+    service: str
     severity: int
     solution: str
     synopsis: str

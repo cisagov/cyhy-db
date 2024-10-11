@@ -15,11 +15,12 @@ class PortScanDoc(ScanDoc):
     """The port scan document model."""
 
     model_config = ConfigDict(extra="forbid")
-    protocol: Protocol
+
     port: int
+    protocol: Protocol
+    reason: str
     service: Dict = {}  # Assuming no specific structure for "service"
     state: str
-    reason: str
 
     class Settings:
         """Beanie settings."""

@@ -30,14 +30,14 @@ class WorldData(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    cvss_average_all: float = 0.0
+    cvss_average_vulnerable: float = 0.0
     host_count: int = 0
-    vulnerable_host_count: int = 0
-    vulnerabilities: VulnerabilityCounts = Field(default_factory=VulnerabilityCounts)
     unique_vulnerabilities: VulnerabilityCounts = Field(
         default_factory=VulnerabilityCounts
     )
-    cvss_average_all: float = 0.0
-    cvss_average_vulnerable: float = 0.0
+    vulnerable_host_count: int = 0
+    vulnerabilities: VulnerabilityCounts = Field(default_factory=VulnerabilityCounts)
 
 
 class TicketMetrics(BaseModel):
@@ -45,8 +45,8 @@ class TicketMetrics(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    median: int = 0
     max: int = 0
+    median: int = 0
 
 
 class TicketOpenMetrics(BaseModel):
@@ -80,29 +80,29 @@ class SnapshotDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
-    owner: str = Field(...)
+    addresses_scanned: int = Field(default=0)
+    cvss_average_all: float = Field(default=0.0)
+    cvss_average_vulnerable: float = Field(default=0.0)
     descendants_included: List[str] = Field(default=[])
-    last_change: datetime = Field(default_factory=utcnow)
-    start_time: datetime = Field(...)
     end_time: datetime = Field(...)
-    latest: bool = Field(default=True)
-    port_count: int = Field(default=0)
-    unique_port_count: int = Field(default=0)
-    unique_operating_systems: int = Field(default=0)
     host_count: int = Field(default=0)
-    vulnerable_host_count: int = Field(default=0)
-    vulnerabilities: VulnerabilityCounts = Field(default_factory=VulnerabilityCounts)
+    last_change: datetime = Field(default_factory=utcnow)
+    latest: bool = Field(default=True)
+    networks: List[IPv4Network] = Field(default=[])
+    owner: str = Field(...)
+    port_count: int = Field(default=0)
+    services: Dict = Field(default_factory=dict)
+    start_time: datetime = Field(...)
+    tix_msec_open: TicketOpenMetrics = Field(default_factory=TicketOpenMetrics)
+    tix_msec_to_close: TicketCloseMetrics = Field(default_factory=TicketCloseMetrics)
+    unique_operating_systems: int = Field(default=0)
+    unique_port_count: int = Field(default=0)
     unique_vulnerabilities: VulnerabilityCounts = Field(
         default_factory=VulnerabilityCounts
     )
-    cvss_average_all: float = Field(default=0.0)
-    cvss_average_vulnerable: float = Field(default=0.0)
+    vulnerabilities: VulnerabilityCounts = Field(default_factory=VulnerabilityCounts)
+    vulnerable_host_count: int = Field(default=0)
     world: WorldData = Field(default_factory=WorldData)
-    networks: List[IPv4Network] = Field(default=[])
-    addresses_scanned: int = Field(default=0)
-    services: Dict = Field(default_factory=dict)
-    tix_msec_open: TicketOpenMetrics = Field(default_factory=TicketOpenMetrics)
-    tix_msec_to_close: TicketCloseMetrics = Field(default_factory=TicketCloseMetrics)
 
     class Settings:
         """Beanie settings."""

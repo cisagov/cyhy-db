@@ -38,8 +38,8 @@ class TallyDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
-    id: str  # owner_id
     counts: Counts = Field(default_factory=Counts)
+    id: str  # owner_id
     last_change: datetime = Field(default_factory=utcnow)
 
     @before_event(Insert, Replace, ValidateOnSave)

@@ -101,10 +101,10 @@ class RequestDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
-    id: str = Field(default=BOGUS_ID)  # type: ignore[assignment]
     agency: Agency
     children: List[Link["RequestDoc"]] = Field(default=[])
     enrolled: datetime = Field(default_factory=utcnow)
+    id: str = Field(default=BOGUS_ID)  # type: ignore[assignment]
     init_stage: Stage = Field(default=Stage.NETSCAN1)
     key: Optional[str] = Field(default=None)
     networks: List[IPv4Network] = Field(default=[])

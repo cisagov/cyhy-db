@@ -16,10 +16,10 @@ class CVEDoc(Document):
     # Validate on assignment so severity is calculated
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
-    # CVE ID as a string
-    id: str = Indexed(primary_field=True)  # type: ignore[assignment]
     cvss_score: float = Field(ge=0.0, le=10.0)
     cvss_version: CVSSVersion = Field(default=CVSSVersion.V3_1)
+    # CVE ID as a string
+    id: str = Indexed(primary_field=True)  # type: ignore[assignment]
     severity: int = Field(ge=1, le=4, default=1)
 
     @model_validator(mode="before")

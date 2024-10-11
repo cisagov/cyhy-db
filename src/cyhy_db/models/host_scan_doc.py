@@ -15,10 +15,10 @@ class HostScanDoc(ScanDoc):
 
     model_config = ConfigDict(extra="forbid")
 
-    name: str
     accuracy: int
-    line: int
     classes: List[dict] = []
+    line: int
+    name: str
 
     class Settings:
         """Beanie settings."""

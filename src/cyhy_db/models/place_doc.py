@@ -13,23 +13,23 @@ class PlaceDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
+    clazz: str = Field(alias="class")  # 'class' is a reserved keyword in Python
+    country_name: str
+    country: str
+    county_fips: Optional[str] = None
+    county: Optional[str] = None
+    elevation_feet: Optional[int] = None
+    elevation_meters: Optional[int] = None
     # GNIS FEATURE_ID (INCITS 446-2008) - https://geonames.usgs.gov/domestic/index.html
     id: int = Field(default_factory=int)  # type: ignore[assignment]
+    latitude_dec: float
+    latitude_dms: Optional[str] = None
+    longitude_dec: float
+    longitude_dms: Optional[str] = None
     name: str
-    clazz: str = Field(alias="class")  # 'class' is a reserved keyword in Python
-    state: str
     state_fips: str
     state_name: str
-    county: Optional[str] = None
-    county_fips: Optional[str] = None
-    country: str
-    country_name: str
-    latitude_dms: Optional[str] = None
-    longitude_dms: Optional[str] = None
-    latitude_dec: float
-    longitude_dec: float
-    elevation_meters: Optional[int] = None
-    elevation_feet: Optional[int] = None
+    state: str
 
     class Settings:
         """Beanie settings."""

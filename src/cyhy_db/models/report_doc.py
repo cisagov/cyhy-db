@@ -19,10 +19,10 @@ class ReportDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
-    owner: str
     generated_time: datetime = Field(default_factory=utcnow)
-    snapshots: List[Link[SnapshotDoc]]
+    owner: str
     report_types: List[ReportType]
+    snapshots: List[Link[SnapshotDoc]]
 
     class Settings:
         """Beanie settings."""

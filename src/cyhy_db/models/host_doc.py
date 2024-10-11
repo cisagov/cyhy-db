@@ -30,16 +30,16 @@ class HostDoc(Document):
     # IP address as an integer
     id: int = Field(default_factory=int)  # type: ignore[assignment]
     ip: IPv4Address = Field(...)
-    owner: str = Field(...)
     last_change: datetime = Field(default_factory=utcnow)
-    next_scan: Optional[datetime] = Field(default=None)
-    state: State = Field(default_factory=lambda: State(reason="new", up=False))
-    stage: Stage = Field(default=Stage.NETSCAN1)
-    status: Status = Field(default=Status.WAITING)
+    latest_scan: Dict[Stage, datetime] = Field(default_factory=dict)
     loc: Optional[Tuple[float, float]] = Field(default=None)
+    next_scan: Optional[datetime] = Field(default=None)
+    owner: str = Field(...)
     priority: int = Field(default=0)
     r: float = Field(default_factory=random.random)
-    latest_scan: Dict[Stage, datetime] = Field(default_factory=dict)
+    stage: Stage = Field(default=Stage.NETSCAN1)
+    state: State = Field(default_factory=lambda: State(reason="new", up=False))
+    status: Status = Field(default=Status.WAITING)
 
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
