@@ -39,7 +39,9 @@ class TallyDoc(Document):
     model_config = ConfigDict(extra="forbid")
 
     counts: Counts = Field(default_factory=Counts)
-    id: str  # owner_id
+    # See: https://github.com/cisagov/cyhy-db/issues/7
+    # Owner ID string
+    id: str  # type: ignore[assignment]
     last_change: datetime = Field(default_factory=utcnow)
 
     @before_event(Insert, Replace, ValidateOnSave)

@@ -27,6 +27,7 @@ class HostDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
+    # See: https://github.com/cisagov/cyhy-db/issues/7
     # IP address as an integer
     id: int = Field(default_factory=int)  # type: ignore[assignment]
     ip: IPv4Address = Field(...)

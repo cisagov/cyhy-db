@@ -104,6 +104,7 @@ class RequestDoc(Document):
     agency: Agency
     children: List[Link["RequestDoc"]] = Field(default=[])
     enrolled: datetime = Field(default_factory=utcnow)
+    # See: https://github.com/cisagov/cyhy-db/issues/7
     id: str = Field(default=BOGUS_ID)  # type: ignore[assignment]
     init_stage: Stage = Field(default=Stage.NETSCAN1)
     key: Optional[str] = Field(default=None)
