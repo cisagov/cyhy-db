@@ -10,6 +10,7 @@ class KEVDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
+    # See: https://github.com/cisagov/cyhy-db/issues/7
     id: str = Field(default_factory=str)  # type: ignore[assignment]
     known_ransomware: bool
 

@@ -20,6 +20,7 @@ class PlaceDoc(Document):
     county: Optional[str] = None
     elevation_feet: Optional[int] = None
     elevation_meters: Optional[int] = None
+    # See: https://github.com/cisagov/cyhy-db/issues/7
     # GNIS FEATURE_ID (INCITS 446-2008) - https://geonames.usgs.gov/domestic/index.html
     id: int = Field(default_factory=int)  # type: ignore[assignment]
     latitude_dec: float
