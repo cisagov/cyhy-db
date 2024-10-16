@@ -18,6 +18,7 @@ class CVEDoc(Document):
 
     cvss_score: float = Field(ge=0.0, le=10.0)
     cvss_version: CVSSVersion = Field(default=CVSSVersion.V3_1)
+    # See: https://github.com/cisagov/cyhy-db/issues/7
     # CVE ID as a string
     id: str = Indexed(primary_field=True)  # type: ignore[assignment]
     severity: int = Field(ge=1, le=4, default=1)
