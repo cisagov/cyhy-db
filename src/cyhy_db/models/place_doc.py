@@ -11,7 +11,7 @@ from pydantic import ConfigDict, Field
 class PlaceDoc(Document):
     """The place document model."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
 
     class_: str = Field(alias="class")  # 'class' is a reserved keyword in Python
     country_name: str
