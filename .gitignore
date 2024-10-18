@@ -5,8 +5,12 @@
 ## Python ##
 __pycache__
 .coverage
+.hypothesis
 .mypy_cache
 .pytest_cache
 .python-version
 *.egg-info
 dist
+
+## VSCode ##
+.vscode
