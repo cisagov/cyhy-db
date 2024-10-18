@@ -68,7 +68,7 @@ class ScanLimit(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    scan_type: ScanType = Field(..., alias="scanType")
+    scan_type: ScanType
     concurrent: int = Field(ge=0)
 
 
