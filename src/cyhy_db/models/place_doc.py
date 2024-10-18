@@ -13,7 +13,7 @@ class PlaceDoc(Document):
 
     model_config = ConfigDict(extra="forbid")
 
-    clazz: str = Field(alias="class")  # 'class' is a reserved keyword in Python
+    class_: str = Field(alias="class")  # 'class' is a reserved keyword in Python
     country_name: str
     country: str
     county_fips: Optional[str] = None
