@@ -8,7 +8,8 @@ import pytest
 
 # cisagov Libraries
 from cyhy_db.models import RequestDoc
-from cyhy_db.models.request_doc import Agency, Window
+from cyhy_db.models.enum import ScanType
+from cyhy_db.models.request_doc import Agency, ScanLimit, Window
 
 
 async def test_init():
@@ -60,3 +61,23 @@ def test_parse_time_invalid_type():
         match="Invalid time format. Expected a string in '%H:%M:%S' format or datetime.time instance.",
     ):
         Window.parse_time(invalid_time_type)
+
+
+async def test_scan_limit():
+    """Test the ScanLimit model."""
+    # Create a RequestDoc object
+    request_doc = RequestDoc(
+        agency=Agency(name="Office of Fragile Networking", acronym="OFN")
+    )
+
+    scan_limit = ScanLimit(scan_type=ScanType.CYHY, concurrent=1)
+    assert scan_limit.scan_type == ScanType.CYHY, "Scan type was not set correctly"
+    assert scan_limit.concurrent == 1, "Concurrent was not set correctly"
+
+    request_doc.scan_limits.append(scan_limit)
+    assert (
+        request_doc.scan_limits[0].scan_type == ScanType.CYHY
+    ), "Scan type was not set correctly"
+    await request_doc.save()
+
+    # TODO complete this test
