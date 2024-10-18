@@ -100,7 +100,7 @@ class ScanDoc(Document, ABC):
 
     @classmethod
     async def tag_latest(
-        cls, owners: List[str], snapshot: Union["SnapshotDoc", ObjectId, str]
+        cls, owners: List[str], snapshot: Union[SnapshotDoc, ObjectId, str]
     ):
         """Tag the latest scan for given owners with a snapshot id."""
         from . import SnapshotDoc
