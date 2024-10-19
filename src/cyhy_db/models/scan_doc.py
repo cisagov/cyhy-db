@@ -87,10 +87,12 @@ class ScanDoc(Document, ABC):
         ),
     ):
         """Reset the latest flag for all scans for a given IP address."""
-        if isinstance(ips, Iterable):
-            ip_ints = [int(ip_address(x)) for x in ips]
-        else:
+        if isinstance(ips, (int, IPv4Address, str)):
             ip_ints = [int(ip_address(ips))]
+        else:
+            # Are you questing for 100% test coverage?
+            # Here be dragons: https://github.com/nedbat/coveragepy/issues/1617
+            ip_ints = [int(ip_address(x)) for x in ips]
 
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.

@@ -141,34 +141,6 @@ async def test_reset_latest_flag_by_owner():
     assert scan_doc.latest is False
 
 
-async def test_reset_latest_flag_by_ip():
-    """Test resetting the latest flag by IP address.
-
-    This test verifies that the latest flag of ScanDoc objects is correctly
-    reset when the reset_latest_flag_by_ip method is called.
-    """
-    IP_TO_RESET_1 = ipaddress.ip_address("128.205.1.2")
-    IP_TO_RESET_2 = ipaddress.ip_address("128.205.1.3")
-    scan_doc_1 = ScanDoc(ip=IP_TO_RESET_1, owner="RESET_BY_IP", source="nmap")
-    scan_doc_2 = ScanDoc(ip=IP_TO_RESET_2, owner="RESET_BY_IP", source="nmap")
-    await scan_doc_1.save()
-    await scan_doc_2.save()
-    # Check that the latest flag is set to True
-    assert scan_doc_1.latest is True
-    # Reset the latest flag on single IP
-    await ScanDoc.reset_latest_flag_by_ip(IP_TO_RESET_1)
-    # Retrieve the ScanDoc object from the database
-    await scan_doc_1.sync()
-    # Check that the latest flag is set to False
-    assert scan_doc_1.latest is False
-    # Reset by both IPs
-    await ScanDoc.reset_latest_flag_by_ip([IP_TO_RESET_1, IP_TO_RESET_2])
-    # Retrieve the ScanDoc object from the database
-    await scan_doc_2.sync()
-    # Check that the latest flag is set to False
-    assert scan_doc_2.latest is False
-
-
 async def test_tag_latest_snapshot_doc():
     """Test tagging the latest scan with a SnapshotDoc.
 
@@ -286,3 +258,81 @@ async def test_tag_latest_invalid_type():
 
     # Confirm that the scan does not have a snapshot
     assert scan_doc.snapshots == [], "Scan should not have any snapshots"
+
+
+async def test_reset_latest_flag_by_ip_single():
+    """Test reset_latest_flag_by_ip with a single IP address."""
+    owner = "RESET_FLAG_SINGLE_IP"
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc.save()
+
+    # Reset the latest flag for a single IP address
+    await ScanDoc.reset_latest_flag_by_ip(scan_doc.ip)
+
+    # Retrieve the ScanDoc object from the database
+    scan_doc = await ScanDoc.find_one(ScanDoc.id == scan_doc.id)
+
+    # Check that the latest flag has been reset
+    assert (
+        scan_doc.latest is False
+    ), "The latest flag was not reset for the single IP address"
+
+
+async def test_reset_latest_flag_by_ip_list():
+    """Test reset_latest_flag_by_ip with a list of IP addresses."""
+    owner = "RESET_FLAG_IP_LIST"
+    scan_doc_1 = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc_1.save()
+
+    scan_doc_2 = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_2_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc_2.save()
+
+    # Reset the latest flag for a list of IP addresses
+    await ScanDoc.reset_latest_flag_by_ip([scan_doc_1.ip, scan_doc_2.ip])
+
+    # Retrieve the ScanDoc objects from the database
+    scan_doc_1 = await ScanDoc.find_one(ScanDoc.id == scan_doc_1.id)
+    scan_doc_2 = await ScanDoc.find_one(ScanDoc.id == scan_doc_2.id)
+
+    # Check that the latest flag has been reset for both IP addresses
+    assert (
+        scan_doc_1.latest is False
+    ), "The latest flag was not reset for the first IP address"
+    assert (
+        scan_doc_2.latest is False
+    ), "The latest flag was not reset for the second IP address"
+
+
+@pytest.mark.asyncio
+async def test_reset_latest_flag_by_ip_empty_iterable():
+    """Test reset_latest_flag_by_ip with an empty iterable."""
+    owner = "RESET_FLAG_EMPTY_ITERABLE"
+    scan_doc = ScanDoc(
+        ip=ipaddress.ip_address(VALID_IP_1_STR),
+        owner=owner,
+        source="nmap",
+    )
+    await scan_doc.save()
+
+    # Reset the latest flag for an empty list of IP addresses
+    await ScanDoc.reset_latest_flag_by_ip([])
+
+    # Retrieve the ScanDoc object from the database
+    scan_doc = await ScanDoc.find_one(ScanDoc.id == scan_doc.id)
+
+    # Check that the latest flag has not been modified
+    assert (
+        scan_doc.latest is True
+    ), "The latest flag should remain True for empty iterable input"
