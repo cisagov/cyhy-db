@@ -72,15 +72,11 @@ async def test_save_with_event():
     await ticket_doc.save()
 
     ticket_doc = await TicketDoc.find_one(TicketDoc.ip_int == VALID_IP_1_INT)
-
-    if ticket_doc:
-        ticket_doc.set_false_positive(
-            new_state=True, reason="Test set false positive", expire_days=30
-        )
-        await ticket_doc.save()
-    else:
-        pytest.fail("Sample ticket was not found after initial save")
-
+    assert ticket_doc is not None, "Sample ticket was not found after initial save"
+    ticket_doc.set_false_positive(
+        new_state=True, reason="Test set false positive", expire_days=30
+    )
+    await ticket_doc.save()
     # Find ticket in DB and confirm it was saved correctly
     ticket_doc_db = await TicketDoc.find_one(TicketDoc.ip_int == VALID_IP_1_INT)
     assert ticket_doc_db is not None, "ticket_doc was not saved to the database"
