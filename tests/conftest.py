@@ -143,7 +143,7 @@ def db_name(mongodb_container):
     yield DATABASE_NAME
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True)
 async def db_client(db_uri):
     """Fixture for client init."""
     print(f"Connecting to {db_uri}")
