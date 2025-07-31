@@ -4,13 +4,11 @@ https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
 """
 
 # Standard Python Libraries
-import asyncio
 import os
 import time
 
 # Third-Party Libraries
 import docker
-from motor.core import AgnosticClient
 import pytest
 
 # cisagov Libraries
@@ -20,9 +18,6 @@ MONGO_INITDB_ROOT_USERNAME = os.environ.get("MONGO_INITDB_ROOT_USERNAME", "mongo
 MONGO_INITDB_ROOT_PASSWORD = os.environ.get("MONGO_INITDB_ROOT_PASSWORD", "secret")
 DATABASE_NAME = os.environ.get("DATABASE_NAME", "test")
 MONGO_EXPRESS_PORT = os.environ.get("MONGO_EXPRESS_PORT", 8081)
-
-# Set the default event loop policy to be compatible with asyncio
-AgnosticClient.get_io_loop = asyncio.get_running_loop
 
 
 @pytest.fixture(autouse=True)
@@ -143,7 +138,7 @@ def db_name(mongodb_container):
     yield DATABASE_NAME
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True)
 async def db_client(db_uri):
     """Fixture for client init."""
     print(f"Connecting to {db_uri}")

@@ -2,7 +2,8 @@
 
 # Third-Party Libraries
 from beanie import Document, View, init_beanie
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+from pymongo import AsyncMongoClient
+from pymongo.asynchronous.database import AsyncDatabase
 
 from .models import (
     CVEDoc,
@@ -42,11 +43,11 @@ ALL_MODELS: list[type[Document] | type[View] | str] = [
 # or initialized because it is an abstract base class.
 
 
-async def initialize_db(db_uri: str, db_name: str) -> AsyncIOMotorDatabase:
+async def initialize_db(db_uri: str, db_name: str) -> AsyncDatabase:
     """Initialize the database."""
     try:
-        client: AsyncIOMotorClient = AsyncIOMotorClient(db_uri)
-        db: AsyncIOMotorDatabase = client[db_name]
+        client: AsyncMongoClient = AsyncMongoClient(db_uri)
+        db: AsyncDatabase = client[db_name]
         await init_beanie(database=db, document_models=ALL_MODELS)
         return db
     except Exception as e:
