@@ -1,8 +1,10 @@
 # cyhy-db #
 
 [![GitHub Build Status](https://github.com/cisagov/cyhy-db/workflows/build/badge.svg)](https://github.com/cisagov/cyhy-db/actions)
+[![License](https://img.shields.io/github/license/cisagov/cyhy-db)](https://spdx.org/licenses/)
 [![CodeQL](https://github.com/cisagov/cyhy-db/workflows/CodeQL/badge.svg)](https://github.com/cisagov/cyhy-db/actions/workflows/codeql-analysis.yml)
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/cyhy-db/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/cyhy-db?branch=develop)
+[![Code Style](https://img.shields.io/badge/Code%20Style-black-black)](https://github.com/psf/black)
 
 This repository implements a Python module for interacting with a Cyber Hygiene database.
 
