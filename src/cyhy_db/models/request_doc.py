@@ -3,7 +3,6 @@
 # Standard Python Libraries
 from datetime import datetime, time
 from ipaddress import IPv4Network
-from typing import List, Optional
 
 # Third-Party Libraries
 from beanie import Document, Insert, Link, Replace, ValidateOnSave, before_event
@@ -58,9 +57,9 @@ class Agency(BaseModel):
 
     name: str
     acronym: str
-    type: Optional[AgencyType] = Field(default=None)
-    contacts: List[Contact] = Field(default=[])
-    location: Optional[Location] = Field(default=None)
+    type: AgencyType | None = Field(default=None)
+    contacts: list[Contact] = Field(default=[])
+    location: Location | None = Field(default=None)
 
 
 class ScanLimit(BaseModel):
@@ -102,22 +101,22 @@ class RequestDoc(Document):
     model_config = ConfigDict(extra="forbid")
 
     agency: Agency
-    children: List[Link["RequestDoc"]] = Field(default=[])
+    children: list[Link["RequestDoc"]] = Field(default=[])
     enrolled: datetime = Field(default_factory=utcnow)
     # See: https://github.com/cisagov/cyhy-db/issues/7
     id: str = Field(default=BOGUS_ID)  # type: ignore[assignment]
     init_stage: Stage = Field(default=Stage.NETSCAN1)
-    key: Optional[str] = Field(default=None)
-    networks: List[IPv4Network] = Field(default=[])
+    key: str | None = Field(default=None)
+    networks: list[IPv4Network] = Field(default=[])
     period_start: datetime = Field(default_factory=utcnow)
     report_period: ReportPeriod = Field(default=ReportPeriod.WEEKLY)
-    report_types: List[ReportType] = Field(default=[])
+    report_types: list[ReportType] = Field(default=[])
     retired: bool = False
-    scan_limits: List[ScanLimit] = Field(default=[])
-    scan_types: List[ScanType] = Field(default=[])
+    scan_limits: list[ScanLimit] = Field(default=[])
+    scan_types: list[ScanType] = Field(default=[])
     scheduler: Scheduler = Field(default=Scheduler.PERSISTENT1)
     stakeholder: bool = False
-    windows: List[Window] = Field(default=[Window()])
+    windows: list[Window] = Field(default=[Window()])
 
     @before_event(Insert, Replace, ValidateOnSave)
     async def set_id_to_acronym(self):

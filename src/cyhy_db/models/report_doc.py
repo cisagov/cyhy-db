@@ -2,7 +2,6 @@
 
 # Standard Python Libraries
 from datetime import datetime
-from typing import List
 
 # Third-Party Libraries
 from beanie import Document, Link
@@ -21,8 +20,8 @@ class ReportDoc(Document):
 
     generated_time: datetime = Field(default_factory=utcnow)
     owner: str
-    report_types: List[ReportType]
-    snapshots: List[Link[SnapshotDoc]]
+    report_types: list[ReportType]
+    snapshots: list[Link[SnapshotDoc]]
 
     class Settings:
         """Beanie settings."""

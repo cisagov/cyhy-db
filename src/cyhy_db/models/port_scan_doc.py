@@ -1,8 +1,5 @@
 """The model for CyHy port scan documents."""
 
-# Standard Python Libraries
-from typing import Dict
-
 # Third-Party Libraries
 from pydantic import ConfigDict
 from pymongo import ASCENDING, IndexModel
@@ -19,7 +16,7 @@ class PortScanDoc(ScanDoc):
     port: int
     protocol: Protocol
     reason: str
-    service: Dict = {}  # Assuming no specific structure for "service"
+    service: dict = {}  # Assuming no specific structure for "service"
     state: str
 
     class Settings:

@@ -3,7 +3,6 @@
 # Standard Python Libraries
 from datetime import datetime
 from ipaddress import IPv4Network
-from typing import Dict, List
 
 # Third-Party Libraries
 from beanie import Document
@@ -83,15 +82,15 @@ class SnapshotDoc(Document):
     addresses_scanned: int = Field(default=0)
     cvss_average_all: float = Field(default=0.0)
     cvss_average_vulnerable: float = Field(default=0.0)
-    descendants_included: List[str] = Field(default=[])
+    descendants_included: list[str] = Field(default=[])
     end_time: datetime = Field(...)
     host_count: int = Field(default=0)
     last_change: datetime = Field(default_factory=utcnow)
     latest: bool = Field(default=True)
-    networks: List[IPv4Network] = Field(default=[])
+    networks: list[IPv4Network] = Field(default=[])
     owner: str = Field(...)
     port_count: int = Field(default=0)
-    services: Dict = Field(default_factory=dict)
+    services: dict = Field(default_factory=dict)
     start_time: datetime = Field(...)
     tix_msec_open: TicketOpenMetrics = Field(default_factory=TicketOpenMetrics)
     tix_msec_to_close: TicketCloseMetrics = Field(default_factory=TicketCloseMetrics)

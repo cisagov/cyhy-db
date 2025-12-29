@@ -3,7 +3,6 @@
 # Standard Python Libraries
 from datetime import datetime, timedelta
 from ipaddress import IPv4Address
-from typing import List, Optional, Tuple
 
 # Third-Party Libraries
 from beanie import (
@@ -32,18 +31,18 @@ class EventDelta(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    from_: Optional[bool | float | int | str] = Field(..., alias="from")
+    from_: bool | float | int | str | None = Field(..., alias="from")
     key: str = Field(...)
-    to: Optional[bool | float | int | str] = Field(...)
+    to: bool | float | int | str | None = Field(...)
 
 
 class TicketEvent(BaseModel):
     """The ticket event model."""
 
     action: TicketAction
-    delta: Optional[EventDelta] = Field(default=None)
+    delta: EventDelta | None = Field(default=None)
     reason: str = Field(...)
-    reference: Optional[BeanieObjectId] = Field(default=None)
+    reference: BeanieObjectId | None = Field(default=None)
     time: datetime
 
 
@@ -55,19 +54,19 @@ class TicketDoc(Document):
     details: dict = Field(default_factory=dict)
     events: list[TicketEvent] = Field(default_factory=list)
     false_positive: bool = Field(default=False)
-    fp_expiration_date: Optional[datetime] = Field(default=None)
+    fp_expiration_date: datetime | None = Field(default=None)
     ip_int: int = Field(...)
     ip: IPv4Address = Field(...)
     last_change: datetime = Field(default_factory=utcnow)
-    loc: Optional[Tuple[float, float]] = Field(default=None)
+    loc: tuple[float, float] | None = Field(default=None)
     open: bool = Field(default=True)
     owner: str = Field(...)
     port: int = Field(...)
     protocol: Protocol = Field(...)
-    snapshots: Optional[List[Link[SnapshotDoc]]] = Field(default_factory=list)
+    snapshots: list[Link[SnapshotDoc]] | None = Field(default_factory=list)
     source_id: int = Field(...)
     source: str = Field(...)
-    time_closed: Optional[datetime] = Field(default=None)
+    time_closed: datetime | None = Field(default=None)
     time_opened: datetime = Field(default_factory=utcnow)
 
     class Settings:

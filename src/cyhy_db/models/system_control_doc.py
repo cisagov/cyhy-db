@@ -3,7 +3,6 @@
 # Standard Python Libraries
 import asyncio
 from datetime import datetime
-from typing import Optional
 
 # Third-Party Libraries
 from beanie import Document
@@ -33,7 +32,7 @@ class SystemControlDoc(Document):
         name = "control"
 
     @classmethod
-    async def wait_for_completion(cls, document_id, timeout: Optional[int] = None):
+    async def wait_for_completion(cls, document_id, timeout: int | None = None):
         """Wait for this control action to complete.
 
         If a timeout is set, only wait a maximum of timeout seconds.
