@@ -4,7 +4,7 @@
 from datetime import datetime
 from ipaddress import IPv4Address, ip_address
 import random
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 # Third-Party Libraries
 from beanie import Document, Insert, Replace, ValidateOnSave, before_event
@@ -32,9 +32,9 @@ class HostDoc(Document):
     id: int = Field(default_factory=int)  # type: ignore[assignment]
     ip: IPv4Address = Field(...)
     last_change: datetime = Field(default_factory=utcnow)
-    latest_scan: Dict[Stage, datetime] = Field(default_factory=dict)
-    loc: Optional[Tuple[float, float]] = Field(default=None)
-    next_scan: Optional[datetime] = Field(default=None)
+    latest_scan: dict[Stage, datetime] = Field(default_factory=dict)
+    loc: tuple[float, float] | None = Field(default=None)
+    next_scan: datetime | None = Field(default=None)
     owner: str = Field(...)
     priority: int = Field(default=0)
     r: float = Field(default_factory=random.random)
@@ -43,7 +43,7 @@ class HostDoc(Document):
     status: Status = Field(default=Status.WAITING)
 
     @model_validator(mode="before")
-    def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def calculate_ip_int(cls, values: dict[str, Any]) -> dict[str, Any]:
         """Calculate the integer representation of an IP address."""
         # ip may still be string if it was just set
         values["_id"] = int(ip_address(values["ip"]))

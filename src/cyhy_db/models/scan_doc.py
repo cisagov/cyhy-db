@@ -2,9 +2,10 @@
 
 # Standard Python Libraries
 from abc import ABC
+from collections.abc import Iterable
 from datetime import datetime
 from ipaddress import IPv4Address, ip_address
-from typing import Any, Dict, Iterable, List, Union
+from typing import Any
 
 # Third-Party Libraries
 from beanie import Document, Link
@@ -28,12 +29,12 @@ class ScanDoc(Document, ABC):
     ip_int: int = Field(...)
     latest: bool = Field(default=True)
     owner: str = Field(...)
-    snapshots: List[Link["SnapshotDoc"]] = Field(default=[])
+    snapshots: list[Link["SnapshotDoc"]] = Field(default=[])
     source: str = Field(...)
     time: datetime = Field(default_factory=utcnow)
 
     @model_validator(mode="before")
-    def calculate_ip_int(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def calculate_ip_int(cls, values: dict[str, Any]) -> dict[str, Any]:
         """Calculate the integer representation of an IP address."""
         # ip may still be string if it was just set
         values["ip_int"] = int(ip_address(values["ip"]))
@@ -102,7 +103,7 @@ class ScanDoc(Document, ABC):
 
     @classmethod
     async def tag_latest(
-        cls, owners: List[str], snapshot: Union[SnapshotDoc, ObjectId, str]
+        cls, owners: list[str], snapshot: SnapshotDoc | ObjectId | str
     ):
         """Tag the latest scan for given owners with a snapshot id."""
         from . import SnapshotDoc

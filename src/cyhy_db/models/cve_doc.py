@@ -1,7 +1,7 @@
 """The model for CVE (Common Vulnerabilities and Exposures) documents."""
 
 # Standard Python Libraries
-from typing import Any, Dict
+from typing import Any
 
 # Third-Party Libraries
 from beanie import Document, Indexed
@@ -24,7 +24,7 @@ class CVEDoc(Document):
     severity: int = Field(ge=1, le=4, default=1)
 
     @model_validator(mode="before")
-    def calculate_severity(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def calculate_severity(cls, values: dict[str, Any]) -> dict[str, Any]:
         """Calculate CVE severity based on the CVSS score and version."""
         if values["cvss_version"] == CVSSVersion.V2:
             if values["cvss_score"] == 10:
