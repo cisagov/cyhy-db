@@ -37,7 +37,13 @@ class HostDoc(Document):
     next_scan: datetime | None = Field(default=None)
     owner: str = Field(...)
     priority: int = Field(default=0)
-    r: float = Field(default_factory=random.random)
+    # The following line generates warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
+    r: float = Field(default_factory=random.random)  # noqa: DUO102 # nosec B311
     stage: Stage = Field(default=Stage.NETSCAN1)
     state: State = Field(default_factory=lambda: State(reason="new", up=False))
     status: Status = Field(default=Status.WAITING)

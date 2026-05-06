@@ -66,11 +66,14 @@ class CyHyProvider(BaseProvider):
             ipaddress.IPv4Network: A randomly generated IPv4 network.
         """
         base_ip = generic.internet.ip_v4()
-        # The following line generates a warning from bandit about "Standard
-        # pseudo-random generators are not suitable for security/cryptographic
-        # purposes."  We aren't using Random() for the purposes of cryptography
-        # here, so we can safely ignore that warning.
-        cidr = random.randint(24, 30)  # nosec B311
+        # The following line generates warnings from bandit (B311) and
+        # flake8 (DUO102) about "Standard pseudo-random generators are
+        # not suitable for security/cryptographic purposes." and
+        # "insecure use of "random" module, prefer
+        # "random.SystemRandom", respectively.  We aren't using
+        # Random() for the purposes of cryptography here, so we can
+        # safely ignore these warnings.
+        cidr = random.randint(24, 30)  # noqa: DUO102 # nosec B311
         network = ipaddress.IPv4Network(f"{base_ip}/{cidr}", strict=False)
         return network
 
@@ -89,17 +92,21 @@ class CVEFactory(factory.Factory):
         model = CVEDoc
 
     id = factory.LazyFunction(lambda: generic.cyhy_provider.cve_id())
-    # The following lines generate warnings from bandit about "Standard
-    # pseudo-random generators are not suitable for security/cryptographic
-    # purposes."  We aren't using Random() for the purposes of cryptography
-    # here, so we can safely ignore those warnings.
+    # The following lines generate warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
     cvss_score = factory.LazyFunction(
-        lambda: round(random.uniform(0, 10), 1)  # nosec B311
+        lambda: round(random.uniform(0, 10), 1)  # noqa: DUO102 # nosec B311
     )
     cvss_version = factory.LazyFunction(
-        lambda: random.choice(list(CVSSVersion))  # nosec B311
+        lambda: random.choice(list(CVSSVersion))  # noqa: DUO102 # nosec B311
     )
-    severity = factory.LazyFunction(lambda: random.randint(1, 4))  # nosec B311
+    severity = factory.LazyFunction(
+        lambda: random.randint(1, 4)  # noqa: DUO102 # nosec B311
+    )
 
 
 class AgencyFactory(factory.Factory):
@@ -114,13 +121,20 @@ class AgencyFactory(factory.Factory):
     acronym = factory.LazyAttribute(
         lambda o: "".join(word[0].upper() for word in o.name.split())
     )
-    # The following lines generate warnings from bandit about "Standard
-    # pseudo-random generators are not suitable for security/cryptographic
-    # purposes."  We aren't using Random() for the purposes of cryptography
-    # here, so we can safely ignore those warnings.
-    type = factory.LazyFunction(lambda: random.choice(list(AgencyType)))  # nosec B311
+    # The following lines generate warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
+    type = factory.LazyFunction(
+        lambda: random.choice(list(AgencyType))  # noqa: DUO102 # nosec B311
+    )
     contacts = factory.LazyFunction(
-        lambda: [ContactFactory() for _ in range(random.randint(1, 5))]  # nosec B311
+        lambda: [
+            ContactFactory()
+            for _ in range(random.randint(1, 5))  # noqa: DUO102 # nosec B311
+        ]
     )
     location = factory.LazyFunction(lambda: LocationFactory())
 
@@ -136,11 +150,15 @@ class ContactFactory(factory.Factory):
     email = factory.Faker("email")
     name = factory.Faker("name")
     phone = factory.Faker("phone_number")
-    # The following line generates a warning from bandit about "Standard
-    # pseudo-random generators are not suitable for security/cryptographic
-    # purposes."  We aren't using Random() for the purposes of cryptography
-    # here, so we can safely ignore that warning.
-    type = factory.LazyFunction(lambda: random.choice(list(PocType)))  # nosec B311
+    # The following line generates warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
+    type = factory.LazyFunction(
+        lambda: random.choice(list(PocType))  # noqa: DUO102 # nosec B311
+    )
 
 
 class LocationFactory(factory.Factory):
@@ -170,12 +188,18 @@ class WindowFactory(factory.Factory):
 
         model = Window
 
-    # The following lines generate warnings from bandit about "Standard
-    # pseudo-random generators are not suitable for security/cryptographic
-    # purposes."  We aren't using Random() for the purposes of cryptography
-    # here, so we can safely ignore those warnings.
-    day = factory.LazyFunction(lambda: random.choice(list(DayOfWeek)))  # nosec B311
-    duration = factory.LazyFunction(lambda: random.randint(0, 168))  # nosec B311
+    # The following line generates warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
+    day = factory.LazyFunction(
+        lambda: random.choice(list(DayOfWeek))  # noqa: DUO102 # nosec B311
+    )
+    duration = factory.LazyFunction(
+        lambda: random.randint(0, 168)  # noqa: DUO102 # nosec B311
+    )
     start = factory.Faker("time", pattern="%H:%M:%S")
 
 
@@ -187,41 +211,52 @@ class RequestDocFactory(factory.Factory):
 
         model = RequestDoc
 
-    # The following lines generate warnings from bandit about "Standard
-    # pseudo-random generators are not suitable for security/cryptographic
-    # purposes."  We aren't using Random() for the purposes of cryptography
-    # here, so we can safely ignore those warnings.
+    # The following lines generate warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
     id = factory.LazyAttribute(
-        lambda o: o.agency.acronym + "-" + str(random.randint(1, 1000))  # nosec B311
+        lambda o: o.agency.acronym
+        + "-"
+        + str(random.randint(1, 1000))  # noqa: DUO102 # nosec B311
     )
     agency = factory.SubFactory(AgencyFactory)
     enrolled = factory.LazyFunction(utcnow)
-    init_stage = factory.LazyFunction(lambda: random.choice(list(Stage)))  # nosec B311
+    init_stage = factory.LazyFunction(
+        lambda: random.choice(list(Stage))  # noqa: DUO102 # nosec B311
+    )
     key = factory.Faker("password")
     period_start = factory.LazyFunction(utcnow)
     report_period = factory.LazyFunction(
-        lambda: random.choice(list(ReportPeriod))  # nosec B311
+        lambda: random.choice(list(ReportPeriod))  # noqa: DUO102 # nosec B311
     )
-    retired = factory.LazyFunction(lambda: random.choice([True, False]))  # nosec B311
+    retired = factory.LazyFunction(
+        lambda: random.choice([True, False])  # noqa: DUO102 # nosec B311
+    )
     scheduler = factory.LazyFunction(
-        lambda: random.choice(list(Scheduler))  # nosec B311
+        lambda: random.choice(list(Scheduler))  # noqa: DUO102 # nosec B311
     )
     stakeholder = factory.LazyFunction(
-        lambda: random.choice([True, False])  # nosec B311
+        lambda: random.choice([True, False])  # noqa: DUO102 # nosec B311
     )
     windows = factory.LazyFunction(
-        lambda: [WindowFactory() for _ in range(random.randint(1, 5))]  # nosec B311
+        lambda: [
+            WindowFactory()
+            for _ in range(random.randint(1, 5))  # noqa: DUO102 # nosec B311
+        ]
     )
     networks = factory.LazyFunction(
         lambda: [
             generic.cyhy_provider.network_ipv4()
-            for _ in range(random.randint(1, 5))  # nosec B311
+            for _ in range(random.randint(1, 5))  # noqa: DUO102 # nosec B311
         ]
     )
     scan_types = factory.LazyFunction(
         lambda: {
-            random.choice(list(ScanType))  # nosec B311
-            for _ in range(random.randint(1, 3))  # nosec B311
+            random.choice(list(ScanType))  # noqa: DUO102 # nosec B311
+            for _ in range(random.randint(1, 3))  # noqa: DUO102 # nosec B311
         }
     )
 
