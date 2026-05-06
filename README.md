@@ -6,7 +6,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/cyhy-db/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/cyhy-db?branch=develop)
 [![Code Style](https://img.shields.io/badge/Code%20Style-black-black)](https://github.com/psf/black)
 
-This repository implements a Python module for interacting with a Cyber Hygiene database.
+This repository implements a Python module for interacting with a
+Cyber Hygiene database.
 
 ## Pre-requisites ##
 
