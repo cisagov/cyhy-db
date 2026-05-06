@@ -72,10 +72,8 @@ class ScanDoc(Document, ABC):
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.latest == True, cls.owner == owner
-        ).update_many(  # noqa: E712
-            Set({cls.latest: False})
-        )
+            cls.latest == True, cls.owner == owner  # noqa: E712
+        ).update_many(Set({cls.latest: False}))
 
     @classmethod
     async def reset_latest_flag_by_ip(
