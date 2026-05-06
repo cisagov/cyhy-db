@@ -71,7 +71,9 @@ class ScanDoc(Document, ABC):
         """Reset the latest flag for all scans for a given owner."""
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
-        await cls.find(cls.latest == True, cls.owner == owner).update_many(  # noqa E712
+        await cls.find(
+            cls.latest == True, cls.owner == owner
+        ).update_many(  # noqa: E712
             Set({cls.latest: False})
         )
 
@@ -98,7 +100,7 @@ class ScanDoc(Document, ABC):
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.latest == True, In(cls.ip_int, ip_ints)  # noqa E712
+            cls.latest == True, In(cls.ip_int, ip_ints)  # noqa: E712
         ).update_many(Set({cls.latest: False}))
 
     @classmethod
@@ -119,5 +121,5 @@ class ScanDoc(Document, ABC):
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.latest == True, In(cls.owner, owners)  # noqa E712
+            cls.latest == True, In(cls.owner, owners)  # noqa: E712
         ).update_many(Push({cls.snapshots: ref}))

@@ -254,7 +254,7 @@ class TicketDoc(Document):
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.open == True, In(cls.owner, owners)  # noqa E712
+            cls.open == True, In(cls.owner, owners)  # noqa: E712
         ).update_many(Push({cls.snapshots: snapshot_oid}))
 
     @classmethod
