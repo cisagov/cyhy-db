@@ -1,7 +1,7 @@
 """The exceptions used in CyHy."""
 
 
-class PortScanNotFoundException(Exception):
+class PortScanNotFoundError(Exception):
     """Exception raised when a referenced PortScanDoc is not found."""
 
     def __init__(self, ticket_id, port_scan_id, port_scan_time, *args):
@@ -22,7 +22,7 @@ class PortScanNotFoundException(Exception):
         super().__init__(message, *args)
 
 
-class VulnScanNotFoundException(Exception):
+class VulnScanNotFoundError(Exception):
     """Exception raised when a referenced VulnScanDoc is not found."""
 
     def __init__(self, ticket_id, vuln_scan_id, vuln_scan_time, *args):

@@ -23,7 +23,7 @@ from cyhy_db.utils.time import utcnow
 
 from . import PortScanDoc, SnapshotDoc, VulnScanDoc
 from .enum import Protocol, TicketAction
-from .exceptions import PortScanNotFoundException, VulnScanNotFoundException
+from .exceptions import PortScanNotFoundError, VulnScanNotFoundError
 
 
 class EventDelta(BaseModel):
@@ -179,7 +179,7 @@ class TicketDoc(Document):
             # This can occur when a port_scan has been archived.  Raise
             # an exception with the info we have for this port_scan from
             # the ticket.
-            raise PortScanNotFoundException(
+            raise PortScanNotFoundError(
                 ticket_id=self.id,
                 port_scan_id=reference_id,
                 port_scan_time=event.time,
@@ -202,7 +202,7 @@ class TicketDoc(Document):
             # This can occur when a vuln_scan has been archived.  Raise
             # an exception with the info we have for this vuln_scan from
             # the ticket.
-            raise VulnScanNotFoundException(
+            raise VulnScanNotFoundError(
                 ticket_id=self.id,
                 vuln_scan_id=reference_id,
                 vuln_scan_time=event.time,
