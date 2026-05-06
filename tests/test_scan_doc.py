@@ -207,7 +207,7 @@ async def test_tag_latest_snapshot_id():
 
 
 async def test_tag_latest_snapshot_id_str():
-    """Test tagging the latest scan with the string representation of a snapshot ObjectId.
+    """Test tagging latest scan with string representation of a snapshot ObjectId.
 
     This test verifies that the latest ScanDoc object is correctly tagged with a
     SnapshotDoc object when the tag_latest method is called with the string

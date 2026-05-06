@@ -91,7 +91,8 @@ class Window(BaseModel):
             return v
         else:
             raise ValueError(
-                "Invalid time format. Expected a string in '%H:%M:%S' format or datetime.time instance."
+                "Invalid time format. Expected a string in '%H:%M:%S' format "
+                "or datetime.time instance."
             )
 
 

@@ -121,9 +121,10 @@ class HostDoc(Document):
         elif nmap_says_up is False:  # NETSCAN says host is down
             self.state = State(up=False, reason=reason)
 
-    # TODO: There are a lot of functions in the Python 2 version that may or may not be used.
-    #       Instead of porting them all over, we should just port them as they are needed.
-    #       And rewrite things that can be done better in Python 3.
+    # TODO: There are a lot of functions in the Python 2 version that
+    # may or may not be used.  Instead of porting them all over, we
+    # should just port them as they are needed, and rewrite things that
+    # can be done better in Python 3.
 
     @classmethod
     @deprecated("Use HostDoc.find_one(HostDoc.ip == ip) instead.")

@@ -5,7 +5,7 @@ class PortScanNotFoundException(Exception):
     """Exception raised when a referenced PortScanDoc is not found."""
 
     def __init__(self, ticket_id, port_scan_id, port_scan_time, *args):
-        """Initialize the exception with the given ticket ID, port scan ID, and port scan time.
+        """Initialize exception with given ticket ID, port scan ID, and port scan time.
 
         Args:
             ticket_id (str): The ID of the ticket.
@@ -26,7 +26,7 @@ class VulnScanNotFoundException(Exception):
     """Exception raised when a referenced VulnScanDoc is not found."""
 
     def __init__(self, ticket_id, vuln_scan_id, vuln_scan_time, *args):
-        """Initialize the exception with the given ticket ID, vulnerability scan ID, and vulnerability scan time.
+        """Initialize exception with given ticket ID, vuln scan ID, and vuln scan time.
 
         Args:
             ticket_id (str): The ID of the ticket.

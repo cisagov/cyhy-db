@@ -17,7 +17,10 @@ def test_deprecated_decorator_with_reason():
 
     with pytest.warns(
         DeprecationWarning,
-        match="old_function is deprecated and will be removed in a future version. Use another function",
+        match=(
+            "old_function is deprecated and will be removed in a future "
+            "version. Use another function"
+        ),
     ):
         result = old_function()
         assert result == "result"

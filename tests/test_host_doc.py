@@ -68,7 +68,7 @@ async def test_set_state_nmap_says_down():
 
 
 async def test_set_state_no_op():
-    """Test setting HostDoc state when inputs are supplied that results in no state change."""
+    """Test when inputs are supplied that result in no state change."""
     # Create a HostDoc object
     host_doc = HostDoc(
         ip=ip_address(VALID_IP_2_STR),
