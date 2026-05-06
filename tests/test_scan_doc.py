@@ -126,15 +126,15 @@ async def test_reset_latest_flag_by_owner():
     reset when the reset_latest_flag_by_owner method is called.
     """
     # Create a ScanDoc object
-    OWNER = "RESET_BY_OWNER"
+    owner = "RESET_BY_OWNER"
     scan_doc = ScanDoc(
-        ip=ipaddress.ip_address(VALID_IP_1_STR), owner=OWNER, source="nmap"
+        ip=ipaddress.ip_address(VALID_IP_1_STR), owner=owner, source="nmap"
     )
     await scan_doc.save()
     # Check that the latest flag is set to True
     assert scan_doc.latest is True
     # Reset the latest flag
-    await ScanDoc.reset_latest_flag_by_owner(OWNER)
+    await ScanDoc.reset_latest_flag_by_owner(owner)
     # Retrieve the ScanDoc object from the database
     await scan_doc.sync()
     # Check that the latest flag is set to False
