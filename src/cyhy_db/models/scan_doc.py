@@ -48,7 +48,7 @@ class ScanDoc(Document, ABC):
 
         name = "PyTest_ScanDocs"
 
-    class Abstract_Settings:
+    class AbstractSettings:
         """Beanie settings to be inherited by subclasses."""
 
         # This class is intentionally not named "Settings" to prevent Beanie from

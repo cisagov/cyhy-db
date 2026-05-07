@@ -21,7 +21,7 @@ class HostScanDoc(ScanDoc):
         """Beanie settings."""
 
         name = "host_scans"
-        indexes = ScanDoc.Abstract_Settings.indexes + [
+        indexes = ScanDoc.AbstractSettings.indexes + [
             IndexModel(
                 [("latest", ASCENDING), ("owner", ASCENDING)], name="latest_owner"
             ),
