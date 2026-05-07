@@ -44,7 +44,7 @@ class ScanDoc(Document, ABC):
         """Beanie settings to be used during testing."""
 
         # These settings are intended for use only during testing.  See
-        # Abstract_Settings below.
+        # AbstractSettings below.
 
         name = "PyTest_ScanDocs"
 
