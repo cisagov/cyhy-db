@@ -35,7 +35,7 @@ class VulnScanNotFoundError(Exception):
         Args:
             ticket_id (str): The ID of the ticket.
             vuln_scan_id (str): The ID of the vulnerability scan document.
-            vuln_scan_time (str): The time of the vulnerability scan.
+            vuln_scan_time (datetime): The time of the vulnerability scan.
             *args: Additional arguments to pass to the base exception class.
         """
         self.ticket_id = ticket_id
