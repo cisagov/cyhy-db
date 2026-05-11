@@ -21,7 +21,7 @@ async def test_wait_for_completion_completed():
 
 
 async def test_wait_for_completion_timeout():
-    """Test wait_for_completion when the document is not completed before the timeout."""
+    """Test wait_for_completion when document is not completed before the timeout."""
     document_id = "test_id"
     mock_doc = AsyncMock()
     mock_doc.completed = False

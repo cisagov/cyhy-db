@@ -37,7 +37,13 @@ class HostDoc(Document):
     next_scan: datetime | None = Field(default=None)
     owner: str = Field(...)
     priority: int = Field(default=0)
-    r: float = Field(default_factory=random.random)
+    # The following line generates warnings from bandit (B311) and
+    # flake8 (DUO102) about "Standard pseudo-random generators are not
+    # suitable for security/cryptographic purposes." and "insecure use
+    # of "random" module, prefer "random.SystemRandom", respectively.
+    # We aren't using Random() for the purposes of cryptography here, so
+    # we can safely ignore these warnings.
+    r: float = Field(default_factory=random.random)  # noqa: DUO102 # nosec B311
     stage: Stage = Field(default=Stage.NETSCAN1)
     state: State = Field(default_factory=lambda: State(reason="new", up=False))
     status: Status = Field(default=Status.WAITING)
@@ -121,9 +127,10 @@ class HostDoc(Document):
         elif nmap_says_up is False:  # NETSCAN says host is down
             self.state = State(up=False, reason=reason)
 
-    # TODO: There are a lot of functions in the Python 2 version that may or may not be used.
-    #       Instead of porting them all over, we should just port them as they are needed.
-    #       And rewrite things that can be done better in Python 3.
+    # TODO: There are a lot of functions in the Python 2 version that
+    # may or may not be used.  Instead of porting them all over, we
+    # should just port them as they are needed, and rewrite things that
+    # can be done better in Python 3.
 
     @classmethod
     @deprecated("Use HostDoc.find_one(HostDoc.ip == ip) instead.")

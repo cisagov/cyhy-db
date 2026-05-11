@@ -12,8 +12,8 @@ import pytest
 # cisagov Libraries
 from cyhy_db.models.enum import Protocol, TicketAction
 from cyhy_db.models.exceptions import (
-    PortScanNotFoundException,
-    VulnScanNotFoundException,
+    PortScanNotFoundError,
+    VulnScanNotFoundError,
 )
 from cyhy_db.models.port_scan_doc import PortScanDoc
 from cyhy_db.models.snapshot_doc import SnapshotDoc
@@ -366,10 +366,14 @@ async def test_latest_port_not_found():
         time=utcnow(),
     )
 
-    with pytest.raises(PortScanNotFoundException):
+    with pytest.raises(PortScanNotFoundError) as exc_info:
         # Mock PortScanDoc.get to return None
         with patch.object(PortScanDoc, "get", return_value=None):
             await ticket_doc.latest_port()
+    assert str(exc_info.value) == (
+        f"Ticket {ticket_doc.id}: referenced PortScanDoc {reference_id} "
+        f"at time {ticket_doc.events[0].time} not found"
+    )
 
 
 async def test_latest_vuln():
@@ -423,7 +427,11 @@ async def test_latest_vuln_not_found():
         time=utcnow(),
     )
 
-    with pytest.raises(VulnScanNotFoundException):
+    with pytest.raises(VulnScanNotFoundError) as exc_info:
         # Mock VulnScanDoc.get to return None
         with patch.object(VulnScanDoc, "get", return_value=None):
             await ticket_doc.latest_vuln()
+    assert str(exc_info.value) == (
+        f"Ticket {ticket_doc.id}: referenced VulnScanDoc {reference_id} "
+        f"at time {ticket_doc.events[0].time} not found"
+    )

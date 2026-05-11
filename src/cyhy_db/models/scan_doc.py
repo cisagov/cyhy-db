@@ -44,11 +44,11 @@ class ScanDoc(Document, ABC):
         """Beanie settings to be used during testing."""
 
         # These settings are intended for use only during testing.  See
-        # Abstract_Settings below.
+        # AbstractSettings below.
 
         name = "PyTest_ScanDocs"
 
-    class Abstract_Settings:
+    class AbstractSettings:
         """Beanie settings to be inherited by subclasses."""
 
         # This class is intentionally not named "Settings" to prevent Beanie from
@@ -71,9 +71,9 @@ class ScanDoc(Document, ABC):
         """Reset the latest flag for all scans for a given owner."""
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
-        await cls.find(cls.latest == True, cls.owner == owner).update_many(  # noqa E712
-            Set({cls.latest: False})
-        )
+        await cls.find(
+            cls.latest == True, cls.owner == owner  # noqa: E712
+        ).update_many(Set({cls.latest: False}))
 
     @classmethod
     async def reset_latest_flag_by_ip(
@@ -98,7 +98,7 @@ class ScanDoc(Document, ABC):
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.latest == True, In(cls.ip_int, ip_ints)  # noqa E712
+            cls.latest == True, In(cls.ip_int, ip_ints)  # noqa: E712
         ).update_many(Set({cls.latest: False}))
 
     @classmethod
@@ -119,5 +119,5 @@ class ScanDoc(Document, ABC):
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.latest == True, In(cls.owner, owners)  # noqa E712
+            cls.latest == True, In(cls.owner, owners)  # noqa: E712
         ).update_many(Push({cls.snapshots: ref}))

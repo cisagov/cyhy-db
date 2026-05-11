@@ -23,7 +23,7 @@ from cyhy_db.utils.time import utcnow
 
 from . import PortScanDoc, SnapshotDoc, VulnScanDoc
 from .enum import Protocol, TicketAction
-from .exceptions import PortScanNotFoundException, VulnScanNotFoundException
+from .exceptions import PortScanNotFoundError, VulnScanNotFoundError
 
 
 class EventDelta(BaseModel):
@@ -112,7 +112,7 @@ class TicketDoc(Document):
 
     @before_event(Insert, Replace, ValidateOnSave)
     async def before_save(self):
-        """Do a false positive sanity check and set data just prior to saving a ticket document."""
+        """Do a false positive sanity check and set data just prior to saving."""
         if self.false_positive and not self.open:
             raise Exception("A ticket marked as a false positive cannot be closed.")
         self.last_change = utcnow()
@@ -158,7 +158,9 @@ class TicketDoc(Document):
                 TicketAction.REOPENED,
             ]:
                 return event.time
-        # This should never happen, but if we don't find any OPENED/VERIFIED/REOPENED events above, gracefully return time_opened
+        # This should never happen, but if we don't find any
+        # OPENED/VERIFIED/REOPENED events above, gracefully return
+        # time_opened.
         return self.time_opened
 
     async def latest_port(self):
@@ -174,9 +176,10 @@ class TicketDoc(Document):
             raise Exception("No references found in ticket events: " + str(self.id))
         port = await PortScanDoc.get(reference_id)
         if not port:
-            # This can occur when a port_scan has been archived
-            # Raise an exception with the info we have for this port_scan from the ticket
-            raise PortScanNotFoundException(
+            # This can occur when a port_scan has been archived.  Raise
+            # an exception with the info we have for this port_scan from
+            # the ticket.
+            raise PortScanNotFoundError(
                 ticket_id=self.id,
                 port_scan_id=reference_id,
                 port_scan_time=event.time,
@@ -196,9 +199,10 @@ class TicketDoc(Document):
             raise Exception("No references found in ticket events: " + str(self.id))
         vuln = await VulnScanDoc.get(reference_id)
         if not vuln:
-            # This can occur when a vuln_scan has been archived
-            # Raise an exception with the info we have for this vuln_scan from the ticket
-            raise VulnScanNotFoundException(
+            # This can occur when a vuln_scan has been archived.  Raise
+            # an exception with the info we have for this vuln_scan from
+            # the ticket.
+            raise VulnScanNotFoundError(
                 ticket_id=self.id,
                 vuln_scan_id=reference_id,
                 vuln_scan_time=event.time,
@@ -246,23 +250,28 @@ class TicketDoc(Document):
 
     @classmethod
     async def tag_open(cls, owners, snapshot_oid):
-        """Add a snapshot object ID to the snapshots field of all open tickets belonging to the specified owners."""
+        """Add snapshot obj ID to snapshots field of open tickets of owners."""
         # flake8 E712 is "comparison to True should be 'if cond is True:' or 'if
         # cond:'" but this is unavoidable due to Beanie syntax.
         await cls.find(
-            cls.open == True, In(cls.owner, owners)  # noqa E712
+            cls.open == True, In(cls.owner, owners)  # noqa: E712
         ).update_many(Push({cls.snapshots: snapshot_oid}))
 
     @classmethod
     async def tag_matching(cls, existing_snapshot_oids, new_snapshot_oid):
-        """Add a new snapshot object ID to the snapshots field of all tickets whose snapshots field contain any of specified existing snapshot object IDs."""
+        """Add snapshot obj ID to tickets that match any specified snapshot obj IDs.
+
+        Add a new snapshot obj ID to the snapshots field of all
+        tickets whose snapshots field contains any of the
+        specified snapshot obj IDs.
+        """
         await cls.find(In(cls.snapshots, existing_snapshot_oids)).update_many(
             Push({cls.snapshots: new_snapshot_oid})
         )
 
     @classmethod
     async def remove_tag(cls, snapshot_oid):
-        """Remove the specified snapshot object ID from the snapshots field of all tickets whose snapshots field contain that snapshot object ID."""
+        """Remove specified snapshot object ID from all tickets."""
         await cls.find(In(cls.snapshots, [snapshot_oid])).update_many(
             Pull({cls.snapshots: snapshot_oid})
         )

@@ -27,7 +27,6 @@ from .system_control_doc import SystemControlDoc
 from .tally_doc import TallyDoc
 from .ticket_doc import TicketDoc
 
-
 __all__ = [
     "CVEDoc",
     "HostDoc",

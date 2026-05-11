@@ -6,7 +6,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/cisagov/cyhy-db/badge.svg?branch=develop)](https://coveralls.io/github/cisagov/cyhy-db?branch=develop)
 [![Code Style](https://img.shields.io/badge/Code%20Style-black-black)](https://github.com/psf/black)
 
-This repository implements a Python module for interacting with a Cyber Hygiene database.
+This repository implements a Python module for interacting with a
+Cyber Hygiene database.
 
 ## Pre-requisites ##
 
@@ -91,7 +92,7 @@ name='Acme Industries' acronym='AI' type=None contacts=[] location=None
 ### Environment Variables ###
 
 | Variable | Description | Default |
-|----------|-------------|---------|
+| -------- | ----------- | ------- |
 | `MONGO_INITDB_ROOT_USERNAME` | The MongoDB root username | `mongoadmin` |
 | `MONGO_INITDB_ROOT_PASSWORD` | The MongoDB root password | `secret` |
 | `DATABASE_NAME` | The name of the database to use for testing | `test` |
@@ -100,7 +101,7 @@ name='Acme Industries' acronym='AI' type=None contacts=[] location=None
 ### Pytest Options ###
 
 | Option | Description | Default |
-|--------|-------------|---------|
+| ------ | ----------- | ------- |
 | `--mongo-express` | Start a local MongoDB instance and Mongo Express web interface | n/a |
 | `--mongo-image-tag` | The tag of the MongoDB Docker image to use | `docker.io/mongo:latest` |
 | `--runslow` | Run slow tests | n/a |

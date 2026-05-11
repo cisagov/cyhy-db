@@ -58,7 +58,10 @@ def test_parse_time_invalid_type():
     invalid_time_type = 12345
     with pytest.raises(
         ValueError,
-        match="Invalid time format. Expected a string in '%H:%M:%S' format or datetime.time instance.",
+        match=(
+            "Invalid time format. Expected a string in '%H:%M:%S' format "
+            "or datetime.time instance."
+        ),
     ):
         Window.parse_time(invalid_time_type)
 
