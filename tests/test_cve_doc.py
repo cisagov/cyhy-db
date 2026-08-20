@@ -1,5 +1,8 @@
 """Test CVE model functionality."""
 
+# Standard Python Libraries
+from decimal import Decimal
+
 # Third-Party Libraries
 from pydantic import ValidationError
 import pytest
@@ -100,3 +103,27 @@ def test_missing_cvss_score_raises_validation_error():
     """Test that a missing CVSS score is a validation error, not a KeyError."""
     with pytest.raises(ValidationError):
         CVEDoc(id="CVE-2024-0128")
+
+
+# pydantic coerces these into the float field, so the validator has to read them
+# the same way rather than testing for int or float.
+coercible_score_params = [
+    ("9.8", 4),
+    (Decimal("9.8"), 4),
+    ("4.0", 2),
+    (Decimal("0.0"), 1),
+]
+
+
+@pytest.mark.parametrize("score, expected_severity", coercible_score_params)
+def test_calculate_severity_with_a_coercible_score(score, expected_severity):
+    """Test a CVSS score in a type pydantic accepts for the float field."""
+    values = CVEDoc.calculate_severity({"id": "CVE-2024-0128", "cvss_score": score})
+    assert values["severity"] == expected_severity
+
+
+@pytest.mark.parametrize("score", ["abc", "", None, [9.8]])
+def test_calculate_severity_leaves_an_unusable_score_alone(score):
+    """Test that a score pydantic will reject is left for it to report."""
+    values = CVEDoc.calculate_severity({"id": "CVE-2024-0128", "cvss_score": score})
+    assert "severity" not in values
