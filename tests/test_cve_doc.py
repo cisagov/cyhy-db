@@ -24,6 +24,13 @@ severity_params = [
 ]
 
 
+def test_calculate_severity_passes_non_dict_through():
+    """Test that non-dict input is returned unchanged."""
+    sentinel = object()
+    result = CVEDoc.calculate_severity(sentinel)
+    assert result is sentinel
+
+
 @pytest.mark.parametrize("version, score, expected_severity", severity_params)
 def test_calculate_severity(version, score, expected_severity):
     """Test that the severity is calculated correctly."""
@@ -79,6 +86,14 @@ def test_calculate_severity_leaves_a_missing_score_alone():
     """Test that a missing CVSS score is left for pydantic to report."""
     values = CVEDoc.calculate_severity({"id": "CVE-2024-0128"})
     assert "severity" not in values
+
+
+def test_calculate_severity_with_raw_string_v2():
+    """Test that a raw string cvss_version matches the V2 enum."""
+    values = CVEDoc.calculate_severity(
+        {"id": "CVE-2024-0128", "cvss_version": "2.0", "cvss_score": 10}
+    )
+    assert values["severity"] == 4
 
 
 def test_missing_cvss_score_raises_validation_error():
