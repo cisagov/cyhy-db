@@ -28,6 +28,17 @@ class CVEDoc(Document):
         """Calculate CVE severity based on the CVSS score and version."""
         # A "before" validator sees the raw input, so field defaults have not been
         # applied yet and cvss_version can be absent even though it has one.
+        #
+        # The annotation says dict because that is what pydantic passes for the
+        # ordinary construction and validation paths, and it is the useful thing
+        # to tell a reader. It is not a guarantee: a "before" model validator is
+        # handed whatever the caller supplied, so a model copy or an update can
+        # arrive as something else. Widening this to Any would describe the edge
+        # case at the cost of the common one, so the annotation stays and the
+        # guard below returns anything that is not a dict untouched.
+        #
+        # Copilot has flagged the mismatch between the two on review before; it
+        # is deliberate.
         if not isinstance(values, dict):
             return values
 
