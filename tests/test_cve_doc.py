@@ -1,5 +1,8 @@
 """Test CVE model functionality."""
 
+# Standard Python Libraries
+from decimal import Decimal
+
 # Third-Party Libraries
 from pydantic import ValidationError
 import pytest
@@ -22,6 +25,13 @@ severity_params = [
     (CVSSVersion.V3_1, 4.0, 2),
     (CVSSVersion.V3_1, 0.0, 1),
 ]
+
+
+def test_calculate_severity_passes_non_dict_through():
+    """Test that non-dict input is returned unchanged."""
+    sentinel = object()
+    result = CVEDoc.calculate_severity(sentinel)
+    assert result is sentinel
 
 
 @pytest.mark.parametrize("version, score, expected_severity", severity_params)
@@ -48,3 +58,72 @@ async def test_save():
 
     assert saved_cve is not None, "CVE not saved correctly"
     assert saved_cve.severity == 4, "Severity not calculated correctly on save"
+
+
+# calculate_severity is a "before" validator, so it runs on the raw input before
+# pydantic applies field defaults. These call it directly, which keeps them off
+# the database and exercises the exact spot where cvss_version may be missing.
+
+severity_default_version_params = [
+    (9.8, 4),
+    (7.0, 3),
+    (4.0, 2),
+    (0.0, 1),
+]
+
+
+@pytest.mark.parametrize("score, expected_severity", severity_default_version_params)
+def test_calculate_severity_without_cvss_version(score, expected_severity):
+    """Test that an omitted CVSS version falls back to the field default."""
+    values = CVEDoc.calculate_severity({"id": "CVE-2024-0128", "cvss_score": score})
+    assert values["severity"] == expected_severity
+
+
+def test_calculate_severity_on_stored_document():
+    """Test a stored document that predates the cvss_version field."""
+    values = CVEDoc.calculate_severity({"_id": "CVE-2024-0128", "cvss_score": 9.8})
+    assert values["severity"] == 4
+
+
+def test_calculate_severity_leaves_a_missing_score_alone():
+    """Test that a missing CVSS score is left for pydantic to report."""
+    values = CVEDoc.calculate_severity({"id": "CVE-2024-0128"})
+    assert "severity" not in values
+
+
+def test_calculate_severity_with_raw_string_v2():
+    """Test that a raw string cvss_version matches the V2 enum."""
+    values = CVEDoc.calculate_severity(
+        {"id": "CVE-2024-0128", "cvss_version": "2.0", "cvss_score": 10}
+    )
+    assert values["severity"] == 4
+
+
+def test_missing_cvss_score_raises_validation_error():
+    """Test that a missing CVSS score is a validation error, not a KeyError."""
+    with pytest.raises(ValidationError):
+        CVEDoc(id="CVE-2024-0128")
+
+
+# pydantic coerces these into the float field, so the validator has to read them
+# the same way rather than testing for int or float.
+coercible_score_params = [
+    ("9.8", 4),
+    (Decimal("9.8"), 4),
+    ("4.0", 2),
+    (Decimal("0.0"), 1),
+]
+
+
+@pytest.mark.parametrize("score, expected_severity", coercible_score_params)
+def test_calculate_severity_with_a_coercible_score(score, expected_severity):
+    """Test a CVSS score in a type pydantic accepts for the float field."""
+    values = CVEDoc.calculate_severity({"id": "CVE-2024-0128", "cvss_score": score})
+    assert values["severity"] == expected_severity
+
+
+@pytest.mark.parametrize("score", ["abc", "", None, [9.8]])
+def test_calculate_severity_leaves_an_unusable_score_alone(score):
+    """Test that a score pydantic will reject is left for it to report."""
+    values = CVEDoc.calculate_severity({"id": "CVE-2024-0128", "cvss_score": score})
+    assert "severity" not in values
