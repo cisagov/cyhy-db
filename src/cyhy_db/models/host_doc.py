@@ -51,6 +51,10 @@ class HostDoc(Document):
     @model_validator(mode="before")
     def calculate_ip_int(cls, values: dict[str, Any]) -> dict[str, Any]:
         """Calculate the integer representation of an IP address."""
+        # Let field validation report missing IPs and invalid model input.
+        if not isinstance(values, dict) or "ip" not in values:
+            return values
+
         # ip may still be string if it was just set
         values["_id"] = int(ip_address(values["ip"]))
         return values
