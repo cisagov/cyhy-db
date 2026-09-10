@@ -3,6 +3,7 @@
 # Standard Python Libraries
 import asyncio
 from datetime import datetime
+from time import monotonic
 
 # Third-Party Libraries
 from beanie import Document
@@ -36,13 +37,18 @@ class SystemControlDoc(Document):
         """Wait for this control action to complete.
 
         If a timeout is set, only wait a maximum of timeout seconds.
+        A zero timeout checks completion once without waiting.
         Returns True if the document was completed, False otherwise.
         """
-        start_time = utcnow()
+        deadline = monotonic() + timeout if timeout is not None else None
         while True:
             doc = await cls.get(document_id)
             if doc and doc.completed:
                 return True
-            if timeout and (utcnow() - start_time).total_seconds() > timeout:
-                return False
-            await asyncio.sleep(CONTROL_DOC_POLL_INTERVAL)
+            delay: float = CONTROL_DOC_POLL_INTERVAL
+            if deadline is not None:
+                remaining = deadline - monotonic()
+                if remaining <= 0:
+                    return False
+                delay = min(delay, remaining)
+            await asyncio.sleep(delay)
